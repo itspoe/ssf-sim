@@ -384,7 +384,7 @@
       </div>
       <div class="ctrl">
         <label>MVP Tier (Up to 15*)</label>
-        <select id="mvp" title="MVP discount applies to base cost only up to 15 stars">
+        <select id="mvp" title="MVP discount applies to base cost only, stacks with 30% discount">
           <option value="0" selected>None</option>
           <option value="0.03">Silver (3%)</option>
           <option value="0.05">Gold (5%)</option>
@@ -408,9 +408,9 @@
       <div class="ctrl">
         <label>Sweet Spot Weight</label>
         <select id="weight">
-          <option value="0.3">Prioritize boom safety</option>
+          <option value="0.3">Prioritise boom safety</option>
           <option value="0.5" selected>Balanced</option>
-          <option value="0.7">Prioritize cost</option>
+          <option value="0.7">Prioritise cost</option>
         </select>
       </div>
     </div>
@@ -430,6 +430,9 @@
   <!-- Scatter -->
   <div class="section hidden" id="scatterSection">
     <div class="section-title">Efficiency Frontier — Cost vs Booms</div>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:12px;line-height:1.6">
+      <span style="color:var(--accent)">Frontier</span> strategies are ones where you can't reduce booms without spending more meso, and can't spend less without accepting more booms.
+    </p>
     <svg id="scatter" viewBox="0 0 800 300"></svg>
   </div>
 
@@ -472,6 +475,9 @@
           <th style="width:70px">Strat</th>
           <th style="width:90px">Score</th>
           <th style="width:100px">Avg Cost</th>
+          <th style="width:90px">Median</th>
+          <th style="width:75px">σ</th>
+          <th style="width:90px">2σ (95%)</th>
           <th style="width:80px">Avg Booms</th>
           <th style="width:75px">Cost +%</th>
           <th style="width:75px">Boom -%</th>
@@ -597,7 +603,8 @@
 
   // ─── Simulate one strategy ───────────────────────────────────────────────────
   function simulate(modes, lv, n, disc, mvpDisc, useSC, useSG) {
-    let tc = 0, tb = 0;
+    let tc = 0, tb = 0, tc2 = 0;
+    const costs = new Float64Array(n);
     const cc = climbCost(lv, disc, mvpDisc, useSG, useSC);
     for (let i = 0; i < n; i++) {
       let cost = 0, booms = 0, star = 18, mi = 0;
@@ -606,7 +613,7 @@
         let succ = succRates[star][m];
         if (useSC) succ = succ * 1.05;
         const dest = destRates[star][m];
-        cost += attemptCost(star, m, lv, disc); // no MVP here
+        cost += attemptCost(star, m, lv, disc);
         const r = Math.random();
         if (r < succ) {
           star++;
@@ -617,9 +624,19 @@
           star = 18; mi = 0;
         }
       }
+      costs[i] = cost;
       tc += cost; tb += booms;
+      tc2 += cost * cost;
     }
-    return { cost: tc / n / 1e9, booms: tb / n };
+    const avg = tc / n;
+    const variance = (tc2 / n) - (avg * avg);
+    const stdev = Math.sqrt(Math.max(0, variance)) / 1e9;
+    // Median
+    costs.sort();
+    const median = (n % 2 === 0
+            ? (costs[n/2 - 1] + costs[n/2]) / 2
+            : costs[Math.floor(n/2)]) / 1e9;
+    return { cost: avg / 1e9, booms: tb / n, stdev, median };
   }
 
   // ─── State ───────────────────────────────────────────────────────────────────
@@ -654,7 +671,7 @@
     for (let i = 0; i < strats.length; i += 8) {
       for (const m of strats.slice(i, i+8)) {
         const r = simulate(m, lv, n, disc, mvpDisc, useSC, useSG);
-        results.push({ strategy: m.join(''), modes: m, cost: r.cost, booms: r.booms });
+        results.push({ strategy: m.join(''), modes: m, cost: r.cost, booms: r.booms, stdev: r.stdev, median: r.median });
         done++;
       }
       prog.style.width = (done / strats.length * 100).toFixed(1) + '%';
@@ -699,7 +716,8 @@
     const best = [...results].sort((a,b) => b.score - a.score)[0];
     const cheapest = [...results].sort((a,b) => a.cost - b.cost)[0];
     const safest = [...results].sort((a,b) => a.booms - b.booms)[0];
-    const discLabel = useDisc ? '30%' : 'None';
+    const mvpLabel = mvpDisc > 0 ? ` + MVP ${(mvpDisc*100).toFixed(0)}%` : '';
+    const discLabel = useDisc ? `30%${mvpLabel}` : (mvpDisc > 0 ? `MVP ${(mvpDisc*100).toFixed(0)}%` : 'None');
     document.getElementById('statsRow').innerHTML = `
     <div class="stat-card"><div class="stat-label">Item Level</div><div class="stat-value">${lv} <span>lv</span></div></div>
     <div class="stat-card"><div class="stat-label">Simulations</div><div class="stat-value">${(n*256).toLocaleString()} <span>total</span></div></div>
@@ -789,6 +807,9 @@
       <td class="strat">${r.strategy}</td>
       <td><div class="bar-wrap"><div class="bar" style="width:${Math.round(r.score*70)}px;background:#3dbc7c"></div>${r.score.toFixed(4)}</div></td>
       <td><div class="bar-wrap"><div class="bar" style="width:${costBar}px;background:#4f9eff"></div>${r.cost.toFixed(2)}b</div></td>
+      <td style="color:var(--text2)">${r.median.toFixed(2)}b</td>
+      <td style="color:var(--text2)">±${r.stdev.toFixed(2)}b</td>
+      <td style="color:var(--text3)">±${(r.stdev*2).toFixed(2)}b</td>
       <td><div class="bar-wrap"><div class="bar" style="width:${boomBar}px;background:#e05555"></div>${r.booms.toFixed(3)}</div></td>
       <td><span class="pill ${parseFloat(cp)<=10?'pill-green':'pill-red'}">${parseFloat(cp)>0?'+':''}${cp}%</span></td>
       <td><span class="pill pill-green">${bp}%</span></td>
@@ -815,12 +836,15 @@
     const mvpLabel = mvpDisc > 0 ? ` + MVP ${(mvpDisc*100).toFixed(0)}%` : '';
     const discLabel = useDisc ? `30% discount (base only)${mvpLabel}` : (mvpDisc > 0 ? `MVP ${(mvpDisc*100).toFixed(0)}% (base only)` : 'No discount');
     const header = `lv${lv} item | 22★ | ${discLabel} | ${parseInt(n).toLocaleString()} sims per strategy`;
-    const cols = ['Rnk','Strat','Score','Cost(b)','Booms','Cost+%','Boom-%'];
+    const cols = ['Rnk','Strat','Score','Avg(b)','Med(b)','σ(b)','2σ(b)','Booms','Cost+%','Boom-%'];
     const rowData = rows.map(r => [
       String(r.rank).padStart(3),
       r.strategy,
       r.score.toFixed(4),
       r.cost.toFixed(2),
+      r.median.toFixed(2),
+      r.stdev.toFixed(2),
+      (r.stdev*2).toFixed(2),
       r.booms.toFixed(3),
       (r.costPct>0?'+':'')+r.costPct.toFixed(1)+'%',
       r.boomPct.toFixed(1)+'%',
@@ -858,8 +882,8 @@
 
   function toTSV() {
     const rows = getDiscordRows();
-    const hdr = 'Rank\tStrategy\tScore\tAvg Cost (b)\tAvg Booms\tCost +%\tBoom -%\tFrontier';
-    const lines = rows.map(r=>[r.rank,r.strategy,r.score.toFixed(4),r.cost.toFixed(3),r.booms.toFixed(4),r.costPct.toFixed(2),r.boomPct.toFixed(2),r.frontier?'yes':''].join('\t'));
+    const hdr = 'Rank\tStrategy\tScore\tAvg Cost (b)\tMedian Cost (b)\tσ (b)\t2σ (b)\tAvg Booms\tCost +%\tBoom -%\tFrontier';
+    const lines = rows.map(r=>[r.rank,r.strategy,r.score.toFixed(4),r.cost.toFixed(3),r.median.toFixed(3),r.stdev.toFixed(3),(r.stdev*2).toFixed(3),r.booms.toFixed(4),r.costPct.toFixed(2),r.boomPct.toFixed(2),r.frontier?'yes':''].join('\t'));
     return [hdr,...lines].join('\n');
   }
   async function copyTSV() {
