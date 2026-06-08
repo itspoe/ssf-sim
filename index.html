@@ -1,430 +1,472 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StarForce Enhancement Simulator</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #0a0c10;
-  --bg2: #111520;
-  --bg3: #181d2a;
-  --border: #2a3048;
-  --border2: #1e2438;
-  --accent: #4f9eff;
-  --accent2: #7b5ea7;
-  --gold: #f5c842;
-  --red: #e05555;
-  --green: #3dbc7c;
-  --text: #d4daf0;
-  --text2: #7a84a8;
-  --text3: #4a5270;
-  --mono: 'Share Tech Mono', monospace;
-  --sans: 'Rajdhani', sans-serif;
-  --glow: 0 0 20px rgba(79,158,255,0.15);
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 15px;
-  line-height: 1.5;
-  min-height: 100vh;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StarForce Enhancement Simulator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --bg2: #111520;
+      --bg3: #181d2a;
+      --border: #2a3048;
+      --border2: #1e2438;
+      --accent: #4f9eff;
+      --accent2: #7b5ea7;
+      --gold: #f5c842;
+      --red: #e05555;
+      --green: #3dbc7c;
+      --text: #d4daf0;
+      --text2: #7a84a8;
+      --text3: #4a5270;
+      --mono: 'Share Tech Mono', monospace;
+      --sans: 'Rajdhani', sans-serif;
+      --glow: 0 0 20px rgba(79,158,255,0.15);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
 
-/* Background grid */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(79,158,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(79,158,255,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
-}
+    /* Background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+              linear-gradient(rgba(79,158,255,0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(79,158,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
 
-/* Header */
-header {
-  padding: 36px 0 28px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 32px;
-}
-.header-inner { display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
-.header-star {
-  font-size: 48px;
-  line-height: 1;
-  filter: drop-shadow(0 0 12px rgba(245,200,66,0.6));
-}
-.header-text h1 {
-  font-family: var(--sans);
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent2) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.header-text p {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text2);
-  margin-top: 4px;
-  letter-spacing: 1px;
-}
+    /* Header */
+    header {
+      padding: 36px 0 28px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+    .header-inner { display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
+    .header-star {
+      font-size: 48px;
+      line-height: 1;
+      filter: drop-shadow(0 0 12px rgba(245,200,66,0.6));
+    }
+    .header-text h1 {
+      font-family: var(--sans);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header-text p {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
 
-/* Section */
-.section {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 24px;
-  margin-bottom: 20px;
-}
-.section-title {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 16px;
-  font-family: var(--mono);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.section-title::before {
-  content: '';
-  display: inline-block;
-  width: 3px;
-  height: 12px;
-  background: var(--accent);
-  border-radius: 2px;
-}
+    /* Notice banner */
+    .notice {
+      background: rgba(245,200,66,0.07);
+      border: 1px solid rgba(245,200,66,0.25);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #c9a82a;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .notice::before { content: '⚠'; font-size: 13px; }
 
-/* Controls grid */
-.controls-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 14px;
-  margin-bottom: 20px;
-}
-.ctrl { display: flex; flex-direction: column; gap: 5px; }
-.ctrl label {
-  font-size: 11px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text2);
-  font-family: var(--mono);
-}
-select, input[type=number] {
-  height: 38px;
-  padding: 0 10px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text);
-  font-family: var(--mono);
-  font-size: 13px;
-  outline: none;
-  transition: border-color 0.2s;
-  width: 100%;
-}
-select:focus, input[type=number]:focus { border-color: var(--accent); }
-select option { background: var(--bg3); }
+    /* Section */
+    .section {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      font-family: var(--mono);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
 
-/* Run button */
-.run-btn {
-  width: 100%;
-  height: 48px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-  border: none;
-  border-radius: 6px;
-  color: #fff;
-  font-family: var(--sans);
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s;
-  position: relative;
-  overflow: hidden;
-}
-.run-btn:hover { opacity: 0.9; }
-.run-btn:active { transform: scale(0.99); }
-.run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    /* Controls grid */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .ctrl { display: flex; flex-direction: column; gap: 5px; }
+    .ctrl label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text2);
+      font-family: var(--mono);
+    }
+    select, input[type=number] {
+      height: 38px;
+      padding: 0 10px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    select:focus, input[type=number]:focus { border-color: var(--accent); }
+    select option { background: var(--bg3); }
 
-/* Progress */
-.progress-wrap { margin: 16px 0 4px; }
-.progress-track {
-  height: 3px;
-  background: var(--bg3);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border-radius: 2px;
-  width: 0%;
-  transition: width 0.1s;
-}
-.status-line {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text2);
-  margin-top: 6px;
-  min-height: 16px;
-  letter-spacing: 0.5px;
-}
+    /* Run button */
+    .run-btn {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      position: relative;
+      overflow: hidden;
+    }
+    .run-btn:hover { opacity: 0.9; }
+    .run-btn:active { transform: scale(0.99); }
+    .run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* Stats row */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.stat-card {
-  background: var(--bg3);
-  border: 1px solid var(--border2);
-  border-radius: 6px;
-  padding: 14px 16px;
-}
-.stat-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
-.stat-value { font-family: var(--mono); font-size: 20px; font-weight: 600; color: var(--text); }
-.stat-value span { font-size: 12px; color: var(--text2); }
+    /* Progress */
+    .progress-wrap { margin: 16px 0 4px; }
+    .progress-track {
+      height: 3px;
+      background: var(--bg3);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.1s;
+    }
+    .status-line {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 6px;
+      min-height: 16px;
+      letter-spacing: 0.5px;
+    }
 
-/* Scatter */
-#scatter { width: 100%; display: block; }
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+    .stat-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+    .stat-value { font-family: var(--mono); font-size: 20px; font-weight: 600; color: var(--text); }
+    .stat-value span { font-size: 12px; color: var(--text2); }
 
-/* Table */
-.tbl-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
-thead tr { border-bottom: 1px solid var(--border); }
-th {
-  padding: 8px 10px;
-  text-align: left;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text3);
-  white-space: nowrap;
-  cursor: pointer;
-  user-select: none;
-}
-th:hover { color: var(--accent); }
-td { padding: 6px 10px; border-bottom: 1px solid var(--border2); white-space: nowrap; }
-tbody tr:hover td { background: rgba(79,158,255,0.04); }
-.rank-num { color: var(--text2); }
-.rank-1 { color: var(--gold); font-weight: 700; }
-.rank-2 { color: #c0c0c0; font-weight: 600; }
-.rank-3 { color: #cd7f32; font-weight: 600; }
-.strat { color: var(--text); font-weight: 600; font-size: 14px; }
-.bar-wrap { display: flex; align-items: center; gap: 6px; }
-.bar { height: 6px; border-radius: 2px; min-width: 1px; }
-.pill {
-  display: inline-block;
-  font-size: 10px;
-  padding: 1px 6px;
-  border-radius: 10px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-.pill-green { background: rgba(61,188,124,0.15); color: var(--green); border: 1px solid rgba(61,188,124,0.2); }
-.pill-red { background: rgba(224,85,85,0.15); color: var(--red); border: 1px solid rgba(224,85,85,0.2); }
-.pill-blue { background: rgba(79,158,255,0.15); color: var(--accent); border: 1px solid rgba(79,158,255,0.2); }
-.pill-gold { background: rgba(245,200,66,0.15); color: var(--gold); border: 1px solid rgba(245,200,66,0.2); }
+    /* Scatter */
+    #scatter { width: 100%; display: block; }
 
-/* Filters */
-.filter-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: flex-end;
-  margin-bottom: 16px;
-}
-.filter-row .ctrl { min-width: 130px; }
+    /* Table */
+    .tbl-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
+    thead tr { border-bottom: 1px solid var(--border); }
+    th {
+      padding: 8px 10px;
+      text-align: left;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text3);
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    th:hover { color: var(--accent); }
+    td { padding: 6px 10px; border-bottom: 1px solid var(--border2); white-space: nowrap; }
+    tbody tr:hover td { background: rgba(79,158,255,0.04); }
+    .rank-num { color: var(--text2); }
+    .rank-1 { color: var(--gold); font-weight: 700; }
+    .rank-2 { color: #c0c0c0; font-weight: 600; }
+    .rank-3 { color: #cd7f32; font-weight: 600; }
+    .strat { color: var(--text); font-weight: 600; font-size: 14px; }
+    .bar-wrap { display: flex; align-items: center; gap: 6px; }
+    .bar { height: 6px; border-radius: 2px; min-width: 1px; }
+    .pill {
+      display: inline-block;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .pill-green { background: rgba(61,188,124,0.15); color: var(--green); border: 1px solid rgba(61,188,124,0.2); }
+    .pill-red { background: rgba(224,85,85,0.15); color: var(--red); border: 1px solid rgba(224,85,85,0.2); }
+    .pill-blue { background: rgba(79,158,255,0.15); color: var(--accent); border: 1px solid rgba(79,158,255,0.2); }
+    .pill-gold { background: rgba(245,200,66,0.15); color: var(--gold); border: 1px solid rgba(245,200,66,0.2); }
 
-/* Export */
-.export-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-.btn {
-  height: 34px;
-  padding: 0 14px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text);
-  font-family: var(--mono);
-  font-size: 12px;
-  cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
-  letter-spacing: 0.5px;
-}
-.btn:hover { border-color: var(--accent); color: var(--accent); }
-.discord-preview {
-  background: #1e2124;
-  border: 1px solid #36393f;
-  border-radius: 6px;
-  padding: 12px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: #dcddde;
-  white-space: pre;
-  overflow-x: auto;
-  margin-top: 10px;
-  line-height: 1.6;
-  display: none;
-}
-.char-warn { color: var(--red); font-size: 11px; font-family: var(--mono); margin-top: 4px; }
+    /* Filters */
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-end;
+      margin-bottom: 16px;
+    }
+    .filter-row .ctrl { min-width: 130px; }
 
-/* Hidden initially */
-.hidden { display: none !important; }
+    /* Export */
+    .export-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .btn {
+      height: 34px;
+      padding: 0 14px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      letter-spacing: 0.5px;
+    }
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    .discord-preview {
+      background: #1e2124;
+      border: 1px solid #36393f;
+      border-radius: 6px;
+      padding: 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #dcddde;
+      white-space: pre;
+      overflow-x: auto;
+      margin-top: 10px;
+      line-height: 1.6;
+      display: none;
+    }
+    .char-warn { color: var(--red); font-size: 11px; font-family: var(--mono); margin-top: 4px; }
 
-footer {
-  text-align: center;
-  padding: 32px 0;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text3);
-  letter-spacing: 1px;
-  border-top: 1px solid var(--border2);
-  margin-top: 32px;
-}
-</style>
+    /* Hidden initially */
+    .hidden { display: none !important; }
+
+    /* Notice banner */
+    .notice {
+      background: rgba(245,200,66,0.07);
+      border: 1px solid rgba(245,200,66,0.25);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #c9a82a;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .notice::before { content: '⚠'; font-size: 13px; }
+
+    footer {
+      text-align: center;
+      padding: 32px 0;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text3);
+      letter-spacing: 1px;
+      border-top: 1px solid var(--border2);
+      margin-top: 32px;
+    }
+  </style>
 </head>
 <body>
 <div class="container">
 
-<header>
-  <div class="header-inner">
-    <div class="header-star">🐸</div>
-    <div class="header-text">
-      <h1>StarForce Simulator</h1>
-      <p>StarForce Enhancement Mode Simulator · 18★→22★ · Monte Carlo · made by poe</p>
+  <header>
+    <div class="header-inner">
+      <div class="header-star">🐸</div>
+      <div class="header-text">
+        <h1>StarForce Enhancement Mode Simulator</h1>
+        <p>18★ → 22★ · 256 strategies · Monte Carlo · Made by Poe</p>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<!-- Notice -->
-<div class="notice">Unsure how shining boom reduction interacts with enhancement modes yet — boom figures may differ</div>
-
+  <!-- Notice -->
+  <div class="notice">Unsure how shining boom reduction interacts with enhancement modes yet — boom figures may differ</div>
 
   <!-- Config -->
-<div class="section">
-  <div class="section-title">Configuration</div>
-  <div class="controls-grid">
-    <div class="ctrl">
-      <label>Item Level</label>
-      <select id="itemLevel">
-        <option value="140">140</option>
-        <option value="150">150</option>
-        <option value="160">160</option>
-        <option value="200">200</option>
-        <option value="250" selected>250</option>
-      </select>
+  <div class="section">
+    <div class="section-title">Configuration</div>
+    <div class="controls-grid">
+      <div class="ctrl">
+        <label>Item Level</label>
+        <select id="itemLevel">
+          <option value="140">140</option>
+          <option value="150">150</option>
+          <option value="160">160</option>
+          <option value="200">200</option>
+          <option value="250" selected>250</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>Simulations</label>
+        <select id="simCount">
+          <option value="1000">1,000</option>
+          <option value="5000">5,000</option>
+          <option value="10000" selected>10,000</option>
+          <option value="20000">20,000</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>30% Discount</label>
+        <select id="discount">
+          <option value="1" selected>Yes (base cost only)</option>
+          <option value="0">No</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>MVP Tier (Up to 15*)</label>
+        <select id="mvp" title="MVP discount applies to base cost only up to 15 stars">
+          <option value="0" selected>None</option>
+          <option value="0.03">Silver (3%)</option>
+          <option value="0.05">Gold (5%)</option>
+          <option value="0.10">Diamond (10%)</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>Star Catching</label>
+        <select id="starcatch">
+          <option value="1" selected>On (+5% success)</option>
+          <option value="0">Off</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>Safeguard (reclimb)</label>
+        <select id="safeguard">
+          <option value="1" selected>On (2× cost, 0 boom)</option>
+          <option value="0">Off</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>Sweet Spot Weight</label>
+        <select id="weight">
+          <option value="0.3">Prioritize boom safety</option>
+          <option value="0.5" selected>Balanced</option>
+          <option value="0.7">Prioritize cost</option>
+        </select>
+      </div>
     </div>
-    <div class="ctrl">
-      <label>Simulations</label>
-      <select id="simCount">
-        <option value="1000">1,000</option>
-        <option value="5000">5,000</option>
-        <option value="10000" selected>10,000</option>
-        <option value="20000">20,000</option>
-      </select>
-    </div>
-    <div class="ctrl">
-      <label>30% Discount</label>
-      <select id="discount">
-        <option value="1" selected>Yes (base cost only)</option>
-        <option value="0">No</option>
-      </select>
-    </div>
-    <div class="ctrl">
-      <label>Star Catching</label>
-      <select id="starcatch">
-        <option value="1" selected>On (+5% success)</option>
-        <option value="0">Off</option>
-      </select>
-    </div>
-    <div class="ctrl">
-      <label>Safeguard (reclimb)</label>
-      <select id="safeguard">
-        <option value="1" selected>On (2× cost, 0 boom)</option>
-        <option value="0">Off</option>
-      </select>
-    </div>
-    <div class="ctrl">
-      <label>Sweet Spot Weight</label>
-      <select id="weight">
-        <option value="0.3">Prioritize boom safety</option>
-        <option value="0.5" selected>Balanced</option>
-        <option value="0.7">Prioritize cost</option>
-      </select>
-    </div>
-  </div>
-  <button class="run-btn" id="runBtn" onclick="runSim()">▶ Run Simulation</button>
-  <div class="progress-wrap">
-    <div class="progress-track"><div class="progress-bar" id="prog"></div></div>
-    <div class="status-line" id="status">Ready — configure settings and run simulation.</div>
-  </div>
-</div>
-
-<!-- Stats -->
-<div class="section hidden" id="statsSection">
-  <div class="section-title">Simulation Summary</div>
-  <div class="stats-row" id="statsRow"></div>
-</div>
-
-<!-- Scatter -->
-<div class="section hidden" id="scatterSection">
-  <div class="section-title">Efficiency Frontier — Cost vs Booms</div>
-  <svg id="scatter" viewBox="0 0 800 300"></svg>
-</div>
-
-<!-- Results -->
-<div class="section hidden" id="resultsSection">
-  <div class="section-title">Strategy Rankings</div>
-
-  <div class="filter-row">
-    <div class="ctrl">
-      <label>Sort By</label>
-      <select id="sortCol" onchange="renderTable()">
-        <option value="score">Sweet Spot Score</option>
-        <option value="cost">Cost (low→high)</option>
-        <option value="booms">Booms (low→high)</option>
-        <option value="strategy">Strategy #</option>
-      </select>
-    </div>
-    <div class="ctrl">
-      <label>Frontier Only</label>
-      <select id="frontierOnly" onchange="renderTable()">
-        <option value="0">Show all</option>
-        <option value="1">Frontier only</option>
-      </select>
-    </div>
-    <div class="ctrl">
-      <label>Max Cost (b)</label>
-      <input type="number" id="fCost" placeholder="e.g. 150" oninput="renderTable()">
-    </div>
-    <div class="ctrl">
-      <label>Max Booms</label>
-      <input type="number" id="fBoom" placeholder="e.g. 2.0" step="0.1" oninput="renderTable()">
+    <button class="run-btn" id="runBtn" onclick="runSim()">▶ Run Simulation</button>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-bar" id="prog"></div></div>
+      <div class="status-line" id="status">Ready — configure settings and run simulation.</div>
     </div>
   </div>
 
-  <div class="tbl-wrap">
-    <table>
-      <thead>
+  <!-- Stats -->
+  <div class="section hidden" id="statsSection">
+    <div class="section-title">Simulation Summary</div>
+    <div class="stats-row" id="statsRow"></div>
+  </div>
+
+  <!-- Scatter -->
+  <div class="section hidden" id="scatterSection">
+    <div class="section-title">Efficiency Frontier — Cost vs Booms</div>
+    <svg id="scatter" viewBox="0 0 800 300"></svg>
+  </div>
+
+  <!-- Results -->
+  <div class="section hidden" id="resultsSection">
+    <div class="section-title">Strategy Rankings</div>
+
+    <div class="filter-row">
+      <div class="ctrl">
+        <label>Sort By</label>
+        <select id="sortCol" onchange="renderTable()">
+          <option value="score">Sweet Spot Score</option>
+          <option value="cost">Cost (low→high)</option>
+          <option value="booms">Booms (low→high)</option>
+          <option value="strategy">Strategy #</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>Frontier Only</label>
+        <select id="frontierOnly" onchange="renderTable()">
+          <option value="0">Show all</option>
+          <option value="1">Frontier only</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>Max Cost (b)</label>
+        <input type="number" id="fCost" placeholder="e.g. 150" oninput="renderTable()">
+      </div>
+      <div class="ctrl">
+        <label>Max Booms</label>
+        <input type="number" id="fBoom" placeholder="e.g. 2.0" step="0.1" oninput="renderTable()">
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
         <tr>
           <th style="width:40px">Rnk</th>
           <th style="width:70px">Strat</th>
@@ -435,311 +477,314 @@ footer {
           <th style="width:75px">Boom -%</th>
           <th style="width:70px">Tag</th>
         </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- Discord Export -->
-<div class="section hidden" id="exportSection">
-  <div class="section-title">Discord Export</div>
-  <div class="filter-row">
-    <div class="ctrl">
-      <label>Top N Rows</label>
-      <input type="number" id="discordN" value="20" min="1" max="256">
-    </div>
-    <div class="ctrl">
-      <label>Frontier Only</label>
-      <select id="discordFrontier">
-        <option value="0">No</option>
-        <option value="1">Yes</option>
-      </select>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
     </div>
   </div>
-  <div class="export-row">
-    <button class="btn" onclick="generateDiscord()">Generate Discord Table</button>
-    <button class="btn" id="copyDiscordBtn" onclick="copyDiscord()">Copy to Clipboard</button>
-    <button class="btn" onclick="copyCSV()">Copy as CSV</button>
-    <button class="btn" onclick="copyTSV()">Copy as TSV</button>
-  </div>
-  <div id="charWarn" class="char-warn hidden"></div>
-  <div class="discord-preview" id="discordPreview"></div>
-</div>
 
-<footer>StarForce Enhancement Mode Simulator · 18★→22★ · Monte Carlo · made by poe 🐸</footer>
+  <!-- Discord Export -->
+  <div class="section hidden" id="exportSection">
+    <div class="section-title">Discord Export</div>
+    <div class="filter-row">
+      <div class="ctrl">
+        <label>Top N Rows</label>
+        <input type="number" id="discordN" value="20" min="1" max="256">
+      </div>
+      <div class="ctrl">
+        <label>Frontier Only</label>
+        <select id="discordFrontier">
+          <option value="0">No</option>
+          <option value="1">Yes</option>
+        </select>
+      </div>
+    </div>
+    <div class="export-row">
+      <button class="btn" onclick="generateDiscord()">Generate Discord Table</button>
+      <button class="btn" id="copyDiscordBtn" onclick="copyDiscord()">Copy to Clipboard</button>
+      <button class="btn" onclick="copyCSV()">Copy as CSV</button>
+      <button class="btn" onclick="copyTSV()">Copy as TSV</button>
+    </div>
+    <div id="charWarn" class="char-warn hidden"></div>
+    <div class="discord-preview" id="discordPreview"></div>
+  </div>
+
+  <footer>StarForce Enhancement Mode Simulator · 18★→22★ · Monte Carlo · Made by Poe 🐸</footer>
 
 </div><!-- /container -->
 
 <script>
-// ─── Game Data ───────────────────────────────────────────────────────────────
-const kmsRates = {
-  0:[0.95,0.05,0,0],1:[0.9,0.1,0,0],2:[0.85,0.15,0,0],3:[0.85,0.15,0,0],
-  4:[0.80,0.2,0,0],5:[0.75,0.25,0,0],6:[0.7,0.3,0,0],7:[0.65,0.35,0,0],
-  8:[0.6,0.4,0,0],9:[0.55,0.45,0,0],10:[0.5,0.5,0,0],
-  11:[0.45,0.55,0,0],12:[0.4,0.6,0,0],13:[0.35,0.65,0,0],14:[0.3,0.7,0,0],
-  15:[0.3,0.679,0,0.021],16:[0.3,0.679,0,0.021],
-  17:[0.15,0.782,0,0.068],18:[0.15,0.782,0,0.068],
-  19:[0.15,0.765,0,0.085],20:[0.3,0.595,0,0.105],21:[0.15,0.7225,0,0.1275]
-};
+  // ─── Game Data ───────────────────────────────────────────────────────────────
+  const kmsRates = {
+    0:[0.95,0.05,0,0],1:[0.9,0.1,0,0],2:[0.85,0.15,0,0],3:[0.85,0.15,0,0],
+    4:[0.80,0.2,0,0],5:[0.75,0.25,0,0],6:[0.7,0.3,0,0],7:[0.65,0.35,0,0],
+    8:[0.6,0.4,0,0],9:[0.55,0.45,0,0],10:[0.5,0.5,0,0],
+    11:[0.45,0.55,0,0],12:[0.4,0.6,0,0],13:[0.35,0.65,0,0],14:[0.3,0.7,0,0],
+    15:[0.3,0.679,0,0.021],16:[0.3,0.679,0,0.021],
+    17:[0.15,0.782,0,0.068],18:[0.15,0.782,0,0.068],
+    19:[0.15,0.765,0,0.085],20:[0.3,0.595,0,0.105],21:[0.15,0.7225,0,0.1275]
+  };
 
-// Mode success rates [mode1, mode2, mode3, mode4] per star
-const succRates = {
-  18:[0.15,0.12,0.10,0.08],
-  19:[0.15,0.12,0.10,0.08],
-  20:[0.30,0.25,0.20,0.15],
-  21:[0.15,0.12,0.10,0.08]
-};
-// Mode destroy rates [mode1, mode2, mode3, mode4] per star
-const destRates = {
-  18:[0.068,0.044,0.018,0],
-  19:[0.085,0.0616,0.036,0],
-  20:[0.105,0.075,0.040,0],
-  21:[0.1275,0.088,0.045,0]
-};
-// Cost multipliers [mode1..4] — extra above base is NOT discounted
-const costMults = {18:[1,2,3.5,6.5],19:[1,2,3.5,6.5],20:[1,2,3.5,6.5],21:[1,2,3.5,6.5]};
+  // Mode success rates [mode1, mode2, mode3, mode4] per star
+  const succRates = {
+    18:[0.15,0.12,0.10,0.08],
+    19:[0.15,0.12,0.10,0.08],
+    20:[0.30,0.25,0.20,0.15],
+    21:[0.15,0.12,0.10,0.08]
+  };
+  // Mode destroy rates [mode1, mode2, mode3, mode4] per star
+  const destRates = {
+    18:[0.068,0.044,0.018,0],
+    19:[0.085,0.0616,0.036,0],
+    20:[0.105,0.075,0.040,0],
+    21:[0.1275,0.088,0.045,0]
+  };
+  // Cost multipliers [mode1..4] — extra above base is NOT discounted
+  const costMults = {18:[1,2,3.5,6.5],19:[1,2,3.5,6.5],20:[1,2,3.5,6.5],21:[1,2,3.5,6.5]};
 
-// ─── Meso Formulas ───────────────────────────────────────────────────────────
-function makeMesoFn(divisor, starExp=2.7, extraMult=1) {
-  return (star, lv) => 100 * Math.round(
-    extraMult * (Math.floor(lv/10)*10)**3 * ((star+1)**starExp) / divisor + 10
-  );
-}
-function preSaviorMesoFn(s) {
-  if (s >= 15) return makeMesoFn(20000);
-  if (s >= 10) return makeMesoFn(40000);
-  return makeMesoFn(2500, 1);
-}
-function kmsMesoFn(s) {
-  switch(s) {
-    case 17: return makeMesoFn(20000, 2.7, 4/3);
-    case 18: return makeMesoFn(20000, 2.7, 20/7);
-    case 19: return makeMesoFn(20000, 2.7, 40/9);
-    case 21: return makeMesoFn(20000, 2.7, 8/5);
-    default: return preSaviorMesoFn(s);
+  // ─── Meso Formulas ───────────────────────────────────────────────────────────
+  function makeMesoFn(divisor, starExp=2.7, extraMult=1) {
+    return (star, lv) => 100 * Math.round(
+            extraMult * (Math.floor(lv/10)*10)**3 * ((star+1)**starExp) / divisor + 10
+    );
   }
-}
-
-const baseFns = [18,19,20,21].map(s => kmsMesoFn(s));
-
-// ─── Attempt Cost ─────────────────────────────────────────────────────────────
-// 30% discount applies to BASE cost only; mode premium is full price
-// attemptCost = baseCost * discount + baseCost * (mult - 1)
-//             = baseCost * (discount + mult - 1)
-function attemptCost(star, modeIdx, lv, disc) {
-  const base = baseFns[star - 18](star, lv);
-  const mult = costMults[star][modeIdx];
-  return base * (disc + mult - 1);
-}
-
-// ─── Reclimb Cost (12→18) ────────────────────────────────────────────────────
-let climbCache = {};
-function climbCost(lv, disc, useSG, useSC) {
-  const key = `${lv}_${disc}_${useSG}_${useSC}`;
-  if (climbCache[key]) return climbCache[key];
-  let c = 0;
-  for (let s = 12; s < 18; s++) {
-    const fn = kmsMesoFn(s);
-    const [sr,,, boom] = kmsRates[s];
-    const isSG = useSG && s >= 15 && s <= 17;
-    const base = fn(s, lv);
-    // Safeguard is also a premium on base cost — apply same discount logic
-    // safeguard = 2× total cost, so: base*disc + base*1 = base*(disc+1)
-    const cost = isSG ? base * (disc + 1) : base * disc;
-    const succ = useSC ? Math.min(sr * 1.05, 1) : sr;
-    c += cost / succ;
+  function preSaviorMesoFn(s) {
+    if (s >= 15) return makeMesoFn(20000);
+    if (s >= 10) return makeMesoFn(40000);
+    return makeMesoFn(2500, 1);
   }
-  return climbCache[key] = c;
-}
+  function kmsMesoFn(s) {
+    switch(s) {
+      case 17: return makeMesoFn(20000, 2.7, 4/3);
+      case 18: return makeMesoFn(20000, 2.7, 20/7);
+      case 19: return makeMesoFn(20000, 2.7, 40/9);
+      case 21: return makeMesoFn(20000, 2.7, 8/5);
+      default: return preSaviorMesoFn(s);
+    }
+  }
 
-// ─── Simulate one strategy ───────────────────────────────────────────────────
-function simulate(modes, lv, n, disc, useSC, useSG) {
-  let tc = 0, tb = 0;
-  const cc = climbCost(lv, disc, useSG, useSC);
-  for (let i = 0; i < n; i++) {
-    let cost = 0, booms = 0, star = 18, mi = 0;
-    while (star < 22) {
-      const m = modes[mi] - 1;
-      let succ = succRates[star][m];
-      if (useSC) succ = succ * 1.05;
-      const dest = destRates[star][m];
-      cost += attemptCost(star, m, lv, disc);
-      const r = Math.random();
-      if (r < succ) {
-        star++;
-        mi = star - 18;
-      } else if (r < succ + dest) {
-        booms++;
-        cost += cc;
-        star = 18; mi = 0;
+  const baseFns = [18,19,20,21].map(s => kmsMesoFn(s));
+
+  // ─── Attempt Cost (18-21★) ────────────────────────────────────────────────────
+  // 30% event discount applies to BASE cost only; mode premium is full price
+  // MVP discount does NOT apply here (only covers stars 1-15)
+  function attemptCost(star, modeIdx, lv, disc) {
+    const base = baseFns[star - 18](star, lv);
+    const mult = costMults[star][modeIdx];
+    return base * (disc + mult - 1);
+  }
+
+  // ─── Reclimb Cost (12→18) ────────────────────────────────────────────────────
+  // MVP discount applies here (stars 12-17 are all ≤15 or covered by wiki range)
+  let climbCache = {};
+  function climbCost(lv, disc, mvpDisc, useSG, useSC) {
+    const key = `${lv}_${disc}_${mvpDisc}_${useSG}_${useSC}`;
+    if (climbCache[key]) return climbCache[key];
+    let c = 0;
+    for (let s = 12; s < 18; s++) {
+      const fn = kmsMesoFn(s);
+      const [sr] = kmsRates[s];
+      const isSG = useSG && s >= 15 && s <= 17;
+      const base = fn(s, lv);
+      // Combined discount for reclimb: event disc + MVP disc, base cost only
+      const reclimbDisc = disc * (1 - mvpDisc);
+      const cost = isSG ? base * (reclimbDisc + 1) : base * reclimbDisc;
+      const succ = useSC ? Math.min(sr * 1.05, 1) : sr;
+      c += cost / succ;
+    }
+    return climbCache[key] = c;
+  }
+
+  // ─── Simulate one strategy ───────────────────────────────────────────────────
+  function simulate(modes, lv, n, disc, mvpDisc, useSC, useSG) {
+    let tc = 0, tb = 0;
+    const cc = climbCost(lv, disc, mvpDisc, useSG, useSC);
+    for (let i = 0; i < n; i++) {
+      let cost = 0, booms = 0, star = 18, mi = 0;
+      while (star < 22) {
+        const m = modes[mi] - 1;
+        let succ = succRates[star][m];
+        if (useSC) succ = succ * 1.05;
+        const dest = destRates[star][m];
+        cost += attemptCost(star, m, lv, disc); // no MVP here
+        const r = Math.random();
+        if (r < succ) {
+          star++;
+          mi = star - 18;
+        } else if (r < succ + dest) {
+          booms++;
+          cost += cc;
+          star = 18; mi = 0;
+        }
       }
+      tc += cost; tb += booms;
     }
-    tc += cost; tb += booms;
-  }
-  return { cost: tc / n / 1e9, booms: tb / n };
-}
-
-// ─── State ───────────────────────────────────────────────────────────────────
-let results = [], sortKey = 'score', sortDir = 'asc';
-
-// ─── Run ─────────────────────────────────────────────────────────────────────
-async function runSim() {
-  climbCache = {}; results = [];
-  const lv   = parseInt(document.getElementById('itemLevel').value) || 250;
-  const n    = parseInt(document.getElementById('simCount').value) || 10000;
-  const useDisc = document.getElementById('discount').value === '1';
-  const disc = useDisc ? 0.7 : 1.0;
-  const useSC  = document.getElementById('starcatch').value === '1';
-  const useSG  = document.getElementById('safeguard').value === '1';
-
-  ['statsSection','scatterSection','resultsSection','exportSection'].forEach(id =>
-    document.getElementById(id).classList.add('hidden'));
-
-  const prog = document.getElementById('prog');
-  const status = document.getElementById('status');
-  const btn = document.getElementById('runBtn');
-  btn.disabled = true;
-  prog.style.width = '0%';
-
-  const strats = [];
-  for (let a=1;a<=4;a++) for (let b=1;b<=4;b++) for (let c=1;c<=4;c++) for (let d=1;d<=4;d++)
-    strats.push([a,b,c,d]);
-
-  let done = 0;
-  for (let i = 0; i < strats.length; i += 8) {
-    for (const m of strats.slice(i, i+8)) {
-      const r = simulate(m, lv, n, disc, useSC, useSG);
-      results.push({ strategy: m.join(''), modes: m, cost: r.cost, booms: r.booms });
-      done++;
-    }
-    prog.style.width = (done / strats.length * 100).toFixed(1) + '%';
-    status.textContent = `Simulating… ${done}/256 strategies (${n.toLocaleString()} runs each)`;
-    await new Promise(r => setTimeout(r, 0));
+    return { cost: tc / n / 1e9, booms: tb / n };
   }
 
-  prog.style.width = '100%';
-  btn.disabled = false;
+  // ─── State ───────────────────────────────────────────────────────────────────
+  let results = [], sortKey = 'score', sortDir = 'asc';
 
-  // Score
-  const w = parseFloat(document.getElementById('weight').value) || 0.5;
-  const base = results.find(r => r.strategy === '1111');
-  const maxCost = Math.max(...results.map(r => r.cost));
-  const maxBoom = Math.max(...results.map(r => r.booms));
-  results.forEach(r => {
-    r.score = 1 - (w * r.cost/maxCost + (1-w) * r.booms/maxBoom);
-    r.costPct = (r.cost / base.cost - 1) * 100;
-    r.boomPct = (1 - r.booms / base.booms) * 100;
-  });
+  // ─── Run ─────────────────────────────────────────────────────────────────────
+  async function runSim() {
+    climbCache = {}; results = [];
+    const lv   = parseInt(document.getElementById('itemLevel').value) || 250;
+    const n    = parseInt(document.getElementById('simCount').value) || 10000;
+    const useDisc = document.getElementById('discount').value === '1';
+    const mvpDisc = parseFloat(document.getElementById('mvp').value) || 0;
+    // Event discount applies to all base costs; MVP only applies to reclimb (stars 1-15)
+    const disc = useDisc ? 0.7 : 1.0;
+    const useSC  = document.getElementById('starcatch').value === '1';
+    const useSG  = document.getElementById('safeguard').value === '1';
 
-  // Frontier
-  const byCost = [...results].sort((a,b) => a.cost - b.cost);
-  let minBoom = Infinity;
-  byCost.forEach(r => { r.frontier = r.booms < minBoom; if (r.frontier) minBoom = r.booms; });
+    ['statsSection','scatterSection','resultsSection','exportSection'].forEach(id =>
+            document.getElementById(id).classList.add('hidden'));
 
-  const sortedByScore = [...results].sort((a,b) => b.score - a.score);
-  results.forEach(r => { r.rank = sortedByScore.indexOf(r) + 1; });
+    const prog = document.getElementById('prog');
+    const status = document.getElementById('status');
+    const btn = document.getElementById('runBtn');
+    btn.disabled = true;
+    prog.style.width = '0%';
 
-  status.textContent = `Done — 256 strategies × ${n.toLocaleString()} runs | 1111 baseline: ${base.cost.toFixed(2)}b avg, ${base.booms.toFixed(2)} avg booms`;
+    const strats = [];
+    for (let a=1;a<=4;a++) for (let b=1;b<=4;b++) for (let c=1;c<=4;c++) for (let d=1;d<=4;d++)
+      strats.push([a,b,c,d]);
 
-  showStats(base, lv, n, useDisc, useSC, useSG);
-  drawScatter();
-  renderTable();
+    let done = 0;
+    for (let i = 0; i < strats.length; i += 8) {
+      for (const m of strats.slice(i, i+8)) {
+        const r = simulate(m, lv, n, disc, mvpDisc, useSC, useSG);
+        results.push({ strategy: m.join(''), modes: m, cost: r.cost, booms: r.booms });
+        done++;
+      }
+      prog.style.width = (done / strats.length * 100).toFixed(1) + '%';
+      status.textContent = `Simulating… ${done}/256 strategies (${n.toLocaleString()} runs each)`;
+      await new Promise(r => setTimeout(r, 0));
+    }
 
-  ['statsSection','scatterSection','resultsSection','exportSection'].forEach(id =>
-    document.getElementById(id).classList.remove('hidden'));
-}
+    prog.style.width = '100%';
+    btn.disabled = false;
 
-// ─── Stats ───────────────────────────────────────────────────────────────────
-function showStats(base, lv, n, useDisc, useSC, useSG) {
-  const best = [...results].sort((a,b) => b.score - a.score)[0];
-  const cheapest = [...results].sort((a,b) => a.cost - b.cost)[0];
-  const safest = [...results].sort((a,b) => a.booms - b.booms)[0];
-  document.getElementById('statsRow').innerHTML = `
+    // Score
+    const w = parseFloat(document.getElementById('weight').value) || 0.5;
+    const base = results.find(r => r.strategy === '1111');
+    const maxCost = Math.max(...results.map(r => r.cost));
+    const maxBoom = Math.max(...results.map(r => r.booms));
+    results.forEach(r => {
+      r.score = 1 - (w * r.cost/maxCost + (1-w) * r.booms/maxBoom);
+      r.costPct = (r.cost / base.cost - 1) * 100;
+      r.boomPct = (1 - r.booms / base.booms) * 100;
+    });
+
+    // Frontier
+    const byCost = [...results].sort((a,b) => a.cost - b.cost);
+    let minBoom = Infinity;
+    byCost.forEach(r => { r.frontier = r.booms < minBoom; if (r.frontier) minBoom = r.booms; });
+
+    const sortedByScore = [...results].sort((a,b) => b.score - a.score);
+    results.forEach(r => { r.rank = sortedByScore.indexOf(r) + 1; });
+
+    status.textContent = `Done — 256 strategies × ${n.toLocaleString()} runs | 1111 baseline: ${base.cost.toFixed(2)}b avg, ${base.booms.toFixed(2)} avg booms`;
+
+    showStats(base, lv, n, useDisc, mvpDisc, useSC, useSG);
+    drawScatter();
+    renderTable();
+
+    ['statsSection','scatterSection','resultsSection','exportSection'].forEach(id =>
+            document.getElementById(id).classList.remove('hidden'));
+  }
+
+  // ─── Stats ───────────────────────────────────────────────────────────────────
+  function showStats(base, lv, n, useDisc, mvpDisc, useSC, useSG) {
+    const best = [...results].sort((a,b) => b.score - a.score)[0];
+    const cheapest = [...results].sort((a,b) => a.cost - b.cost)[0];
+    const safest = [...results].sort((a,b) => a.booms - b.booms)[0];
+    const discLabel = useDisc ? '30%' : 'None';
+    document.getElementById('statsRow').innerHTML = `
     <div class="stat-card"><div class="stat-label">Item Level</div><div class="stat-value">${lv} <span>lv</span></div></div>
     <div class="stat-card"><div class="stat-label">Simulations</div><div class="stat-value">${(n*256).toLocaleString()} <span>total</span></div></div>
-    <div class="stat-card"><div class="stat-label">Discount</div><div class="stat-value">${useDisc?'30%':'None'} <span>${useSC?'+ SC':''}</span></div></div>
+    <div class="stat-card"><div class="stat-label">Discount</div><div class="stat-value">${discLabel} <span>${useSC?'+ SC':''}</span></div></div>
     <div class="stat-card"><div class="stat-label">Baseline (1111)</div><div class="stat-value">${base.cost.toFixed(1)} <span>b avg</span></div></div>
     <div class="stat-card"><div class="stat-label">Best Sweet Spot</div><div class="stat-value">${best.strategy} <span>${best.cost.toFixed(1)}b</span></div></div>
     <div class="stat-card"><div class="stat-label">Cheapest</div><div class="stat-value">${cheapest.strategy} <span>${cheapest.cost.toFixed(1)}b</span></div></div>
     <div class="stat-card"><div class="stat-label">Safest (0 boom)</div><div class="stat-value">${safest.strategy} <span>${safest.booms.toFixed(3)} avg</span></div></div>
   `;
-}
-
-// ─── Scatter ─────────────────────────────────────────────────────────────────
-function drawScatter() {
-  const svg = document.getElementById('scatter');
-  const W=800, H=300, pad={l:55,r:20,t:20,b:40};
-  const cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
-  const costs=results.map(r=>r.cost), booms=results.map(r=>r.booms);
-  const minC=Math.min(...costs), maxC=Math.max(...costs);
-  const minB=Math.min(...booms), maxB=Math.max(...booms);
-  const cx=v=>(v-minC)/(maxC-minC)*cw+pad.l;
-  const cy=v=>ch-(v-minB)/(maxB-minB)*ch+pad.t;
-
-  let html = '';
-  // Grid
-  for(let i=0;i<=5;i++){
-    const xv=minC+(maxC-minC)*i/5, xp=cx(xv);
-    html+=`<line x1="${xp}" y1="${pad.t}" x2="${xp}" y2="${pad.t+ch}" stroke="#1e2438" stroke-width="1"/>`;
-    html+=`<text x="${xp}" y="${H-10}" text-anchor="middle" font-size="9" fill="#4a5270" font-family="Share Tech Mono">${xv.toFixed(0)}b</text>`;
-    const yv=minB+(maxB-minB)*i/5, yp=cy(yv);
-    html+=`<line x1="${pad.l}" y1="${yp}" x2="${pad.l+cw}" y2="${yp}" stroke="#1e2438" stroke-width="1"/>`;
-    html+=`<text x="${pad.l-6}" y="${yp+3}" text-anchor="end" font-size="9" fill="#4a5270" font-family="Share Tech Mono">${yv.toFixed(2)}</text>`;
   }
-  // Axis labels
-  html+=`<text x="${pad.l+cw/2}" y="${H-1}" text-anchor="middle" font-size="10" fill="#7a84a8" font-family="Share Tech Mono">avg cost (b)</text>`;
-  html+=`<text x="12" y="${pad.t+ch/2}" text-anchor="middle" font-size="10" fill="#7a84a8" font-family="Share Tech Mono" transform="rotate(-90,12,${pad.t+ch/2})">avg booms</text>`;
 
-  // Non-frontier dots
-  results.filter(r=>!r.frontier).forEach(r=>{
-    html+=`<circle cx="${cx(r.cost)}" cy="${cy(r.booms)}" r="2.5" fill="#2a3048" stroke="#3d4870" stroke-width="0.5" opacity="0.8"/>`;
-  });
+  // ─── Scatter ─────────────────────────────────────────────────────────────────
+  function drawScatter() {
+    const svg = document.getElementById('scatter');
+    const W=800, H=300, pad={l:55,r:20,t:20,b:40};
+    const cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
+    const costs=results.map(r=>r.cost), booms=results.map(r=>r.booms);
+    const minC=Math.min(...costs), maxC=Math.max(...costs);
+    const minB=Math.min(...booms), maxB=Math.max(...booms);
+    const cx=v=>(v-minC)/(maxC-minC)*cw+pad.l;
+    const cy=v=>ch-(v-minB)/(maxB-minB)*ch+pad.t;
 
-  // Frontier line
-  const fr=[...results].filter(r=>r.frontier).sort((a,b)=>a.cost-b.cost);
-  if(fr.length>1){
-    html+=`<polyline points="${fr.map(r=>`${cx(r.cost)},${cy(r.booms)}`).join(' ')}" fill="none" stroke="#4f9eff" stroke-width="1" opacity="0.4" stroke-dasharray="4 2"/>`;
+    let html = '';
+    // Grid
+    for(let i=0;i<=5;i++){
+      const xv=minC+(maxC-minC)*i/5, xp=cx(xv);
+      html+=`<line x1="${xp}" y1="${pad.t}" x2="${xp}" y2="${pad.t+ch}" stroke="#1e2438" stroke-width="1"/>`;
+      html+=`<text x="${xp}" y="${H-10}" text-anchor="middle" font-size="9" fill="#4a5270" font-family="Share Tech Mono">${xv.toFixed(0)}b</text>`;
+      const yv=minB+(maxB-minB)*i/5, yp=cy(yv);
+      html+=`<line x1="${pad.l}" y1="${yp}" x2="${pad.l+cw}" y2="${yp}" stroke="#1e2438" stroke-width="1"/>`;
+      html+=`<text x="${pad.l-6}" y="${yp+3}" text-anchor="end" font-size="9" fill="#4a5270" font-family="Share Tech Mono">${yv.toFixed(2)}</text>`;
+    }
+    // Axis labels
+    html+=`<text x="${pad.l+cw/2}" y="${H-1}" text-anchor="middle" font-size="10" fill="#7a84a8" font-family="Share Tech Mono">avg cost (b)</text>`;
+    html+=`<text x="12" y="${pad.t+ch/2}" text-anchor="middle" font-size="10" fill="#7a84a8" font-family="Share Tech Mono" transform="rotate(-90,12,${pad.t+ch/2})">avg booms</text>`;
+
+    // Non-frontier dots
+    results.filter(r=>!r.frontier).forEach(r=>{
+      html+=`<circle cx="${cx(r.cost)}" cy="${cy(r.booms)}" r="2.5" fill="#2a3048" stroke="#3d4870" stroke-width="0.5" opacity="0.8"/>`;
+    });
+
+    // Frontier line
+    const fr=[...results].filter(r=>r.frontier).sort((a,b)=>a.cost-b.cost);
+    if(fr.length>1){
+      html+=`<polyline points="${fr.map(r=>`${cx(r.cost)},${cy(r.booms)}`).join(' ')}" fill="none" stroke="#4f9eff" stroke-width="1" opacity="0.4" stroke-dasharray="4 2"/>`;
+    }
+    // Frontier dots + labels
+    fr.forEach(r=>{
+      html+=`<circle cx="${cx(r.cost)}" cy="${cy(r.booms)}" r="4" fill="#4f9eff" opacity="0.9"/>`;
+      html+=`<text x="${cx(r.cost)}" y="${cy(r.booms)-7}" text-anchor="middle" font-size="8" fill="#4f9eff" font-family="Share Tech Mono">${r.strategy}</text>`;
+    });
+
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.innerHTML = html;
   }
-  // Frontier dots + labels
-  fr.forEach(r=>{
-    html+=`<circle cx="${cx(r.cost)}" cy="${cy(r.booms)}" r="4" fill="#4f9eff" opacity="0.9"/>`;
-    html+=`<text x="${cx(r.cost)}" y="${cy(r.booms)-7}" text-anchor="middle" font-size="8" fill="#4f9eff" font-family="Share Tech Mono">${r.strategy}</text>`;
-  });
 
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.innerHTML = html;
-}
+  // ─── Table ────────────────────────────────────────────────────────────────────
+  function renderTable() {
+    const frontierOnly = document.getElementById('frontierOnly').value === '1';
+    const sortCol = document.getElementById('sortCol').value;
+    const maxCostF = parseFloat(document.getElementById('fCost').value) || Infinity;
+    const maxBoomF = parseFloat(document.getElementById('fBoom').value) || Infinity;
 
-// ─── Table ────────────────────────────────────────────────────────────────────
-function renderTable() {
-  const frontierOnly = document.getElementById('frontierOnly').value === '1';
-  const sortCol = document.getElementById('sortCol').value;
-  const maxCostF = parseFloat(document.getElementById('fCost').value) || Infinity;
-  const maxBoomF = parseFloat(document.getElementById('fBoom').value) || Infinity;
+    let data = results.filter(r => r.cost <= maxCostF && r.booms <= maxBoomF);
+    if (frontierOnly) data = data.filter(r => r.frontier);
 
-  let data = results.filter(r => r.cost <= maxCostF && r.booms <= maxBoomF);
-  if (frontierOnly) data = data.filter(r => r.frontier);
+    data.sort((a,b) => {
+      if (sortCol === 'cost') return a.cost - b.cost;
+      if (sortCol === 'booms') return a.booms - b.booms;
+      if (sortCol === 'strategy') return parseInt(a.strategy) - parseInt(b.strategy);
+      return b.score - a.score;
+    });
 
-  data.sort((a,b) => {
-    if (sortCol === 'cost') return a.cost - b.cost;
-    if (sortCol === 'booms') return a.booms - b.booms;
-    if (sortCol === 'strategy') return parseInt(a.strategy) - parseInt(b.strategy);
-    return b.score - a.score;
-  });
+    const maxCost = Math.max(...data.map(r=>r.cost));
+    const maxBoom = Math.max(...data.map(r=>r.booms));
 
-  const maxCost = Math.max(...data.map(r=>r.cost));
-  const maxBoom = Math.max(...data.map(r=>r.booms));
-
-  document.getElementById('tbody').innerHTML = data.map((r, i) => {
-    const dispRank = sortCol === 'score' ? i+1 : r.rank;
-    const rc = dispRank === 1 ? 'rank-1' : dispRank === 2 ? 'rank-2' : dispRank === 3 ? 'rank-3' : 'rank-num';
-    const costBar = Math.round(r.cost/maxCost*70);
-    const boomBar = Math.round(r.booms/maxBoom*70);
-    const cp = r.costPct.toFixed(1);
-    const bp = r.boomPct.toFixed(1);
-    const tag = r.frontier ? `<span class="pill pill-blue">frontier</span>` : '';
-    return `<tr>
+    document.getElementById('tbody').innerHTML = data.map((r, i) => {
+      const dispRank = sortCol === 'score' ? i+1 : r.rank;
+      const rc = dispRank === 1 ? 'rank-1' : dispRank === 2 ? 'rank-2' : dispRank === 3 ? 'rank-3' : 'rank-num';
+      const costBar = Math.round(r.cost/maxCost*70);
+      const boomBar = Math.round(r.booms/maxBoom*70);
+      const cp = r.costPct.toFixed(1);
+      const bp = r.boomPct.toFixed(1);
+      const tag = r.frontier ? `<span class="pill pill-blue">frontier</span>` : '';
+      return `<tr>
       <td class="${rc}" style="font-family:var(--mono)">${dispRank}</td>
       <td class="strat">${r.strategy}</td>
       <td><div class="bar-wrap"><div class="bar" style="width:${Math.round(r.score*70)}px;background:#3dbc7c"></div>${r.score.toFixed(4)}</div></td>
@@ -749,79 +794,82 @@ function renderTable() {
       <td><span class="pill pill-green">${bp}%</span></td>
       <td>${tag}</td>
     </tr>`;
-  }).join('');
-}
-
-// ─── Discord Export ───────────────────────────────────────────────────────────
-function getDiscordRows() {
-  const n = parseInt(document.getElementById('discordN').value) || 20;
-  const frontierOnly = document.getElementById('discordFrontier').value === '1';
-  let data = [...results].sort((a,b) => b.score - a.score);
-  if (frontierOnly) data = data.filter(r => r.frontier);
-  return data.slice(0, n);
-}
-
-function buildDiscordTable() {
-  const rows = getDiscordRows();
-  const lv = document.getElementById('itemLevel').value;
-  const useDisc = document.getElementById('discount').value === '1';
-  const n = document.getElementById('simCount').value;
-  const header = `250 item | 22★ | ${useDisc?'30% discount (base only)':'No discount'} | ${parseInt(n).toLocaleString()} sims per strategy`;
-  const cols = ['Rnk','Strat','Score','Cost(b)','Booms','Cost+%','Boom-%'];
-  const rowData = rows.map(r => [
-    String(r.rank).padStart(3),
-    r.strategy,
-    r.score.toFixed(4),
-    r.cost.toFixed(2),
-    r.booms.toFixed(3),
-    (r.costPct>0?'+':'')+r.costPct.toFixed(1)+'%',
-    r.boomPct.toFixed(1)+'%',
-  ]);
-  const widths = cols.map((c,i) => Math.max(c.length, ...rowData.map(r=>r[i].length)));
-  const pad = (s,w) => s.padEnd(w);
-  const hLine = cols.map((c,i) => pad(c,widths[i])).join('  ');
-  const sep = widths.map(w=>'-'.repeat(w)).join('  ');
-  const dLines = rowData.map(r => r.map((c,i)=>pad(c,widths[i])).join('  '));
-  return '```\n'+header+'\n'+hLine+'\n'+sep+'\n'+dLines.join('\n')+'\n```';
-}
-
-function generateDiscord() {
-  const table = buildDiscordTable();
-  const preview = document.getElementById('discordPreview');
-  preview.textContent = table;
-  preview.style.display = 'block';
-  const warn = document.getElementById('charWarn');
-  if (table.length > 1980) {
-    warn.textContent = `⚠ ${table.length} chars — exceeds Discord 2000 limit. Reduce rows.`;
-    warn.classList.remove('hidden');
-  } else {
-    warn.textContent = `${table.length} / 2000 chars`;
-    warn.classList.remove('hidden');
+    }).join('');
   }
-}
 
-async function copyDiscord() {
-  const table = buildDiscordTable();
-  await navigator.clipboard.writeText(table);
-  const b = document.getElementById('copyDiscordBtn');
-  const o = b.textContent; b.textContent = 'Copied!';
-  setTimeout(()=>b.textContent=o, 1500);
-}
+  // ─── Discord Export ───────────────────────────────────────────────────────────
+  function getDiscordRows() {
+    const n = parseInt(document.getElementById('discordN').value) || 20;
+    const frontierOnly = document.getElementById('discordFrontier').value === '1';
+    let data = [...results].sort((a,b) => b.score - a.score);
+    if (frontierOnly) data = data.filter(r => r.frontier);
+    return data.slice(0, n);
+  }
 
-function toTSV() {
-  const rows = getDiscordRows();
-  const hdr = 'Rank\tStrategy\tScore\tAvg Cost (b)\tAvg Booms\tCost +%\tBoom -%\tFrontier';
-  const lines = rows.map(r=>[r.rank,r.strategy,r.score.toFixed(4),r.cost.toFixed(3),r.booms.toFixed(4),r.costPct.toFixed(2),r.boomPct.toFixed(2),r.frontier?'yes':''].join('\t'));
-  return [hdr,...lines].join('\n');
-}
-async function copyTSV() {
-  await navigator.clipboard.writeText(toTSV());
-  alert('TSV copied!');
-}
-async function copyCSV() {
-  await navigator.clipboard.writeText(toTSV().replace(/\t/g,','));
-  alert('CSV copied!');
-}
+  function buildDiscordTable() {
+    const rows = getDiscordRows();
+    const lv = document.getElementById('itemLevel').value;
+    const useDisc = document.getElementById('discount').value === '1';
+    const mvpDisc = parseFloat(document.getElementById('mvp').value) || 0;
+    const n = document.getElementById('simCount').value;
+    const mvpLabel = mvpDisc > 0 ? ` + MVP ${(mvpDisc*100).toFixed(0)}%` : '';
+    const discLabel = useDisc ? `30% discount (base only)${mvpLabel}` : (mvpDisc > 0 ? `MVP ${(mvpDisc*100).toFixed(0)}% (base only)` : 'No discount');
+    const header = `lv${lv} item | 22★ | ${discLabel} | ${parseInt(n).toLocaleString()} sims per strategy`;
+    const cols = ['Rnk','Strat','Score','Cost(b)','Booms','Cost+%','Boom-%'];
+    const rowData = rows.map(r => [
+      String(r.rank).padStart(3),
+      r.strategy,
+      r.score.toFixed(4),
+      r.cost.toFixed(2),
+      r.booms.toFixed(3),
+      (r.costPct>0?'+':'')+r.costPct.toFixed(1)+'%',
+      r.boomPct.toFixed(1)+'%',
+    ]);
+    const widths = cols.map((c,i) => Math.max(c.length, ...rowData.map(r=>r[i].length)));
+    const pad = (s,w) => s.padEnd(w);
+    const hLine = cols.map((c,i) => pad(c,widths[i])).join('  ');
+    const sep = widths.map(w=>'-'.repeat(w)).join('  ');
+    const dLines = rowData.map(r => r.map((c,i)=>pad(c,widths[i])).join('  '));
+    return '```\n'+header+'\n'+hLine+'\n'+sep+'\n'+dLines.join('\n')+'\n```';
+  }
+
+  function generateDiscord() {
+    const table = buildDiscordTable();
+    const preview = document.getElementById('discordPreview');
+    preview.textContent = table;
+    preview.style.display = 'block';
+    const warn = document.getElementById('charWarn');
+    if (table.length > 1980) {
+      warn.textContent = `⚠ ${table.length} chars — exceeds Discord 2000 limit. Reduce rows.`;
+      warn.classList.remove('hidden');
+    } else {
+      warn.textContent = `${table.length} / 2000 chars`;
+      warn.classList.remove('hidden');
+    }
+  }
+
+  async function copyDiscord() {
+    const table = buildDiscordTable();
+    await navigator.clipboard.writeText(table);
+    const b = document.getElementById('copyDiscordBtn');
+    const o = b.textContent; b.textContent = 'Copied!';
+    setTimeout(()=>b.textContent=o, 1500);
+  }
+
+  function toTSV() {
+    const rows = getDiscordRows();
+    const hdr = 'Rank\tStrategy\tScore\tAvg Cost (b)\tAvg Booms\tCost +%\tBoom -%\tFrontier';
+    const lines = rows.map(r=>[r.rank,r.strategy,r.score.toFixed(4),r.cost.toFixed(3),r.booms.toFixed(4),r.costPct.toFixed(2),r.boomPct.toFixed(2),r.frontier?'yes':''].join('\t'));
+    return [hdr,...lines].join('\n');
+  }
+  async function copyTSV() {
+    await navigator.clipboard.writeText(toTSV());
+    alert('TSV copied!');
+  }
+  async function copyCSV() {
+    await navigator.clipboard.writeText(toTSV().replace(/\t/g,','));
+    alert('CSV copied!');
+  }
 </script>
 </body>
 </html>
