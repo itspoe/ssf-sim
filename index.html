@@ -355,6 +355,9 @@
   <!-- Config -->
   <div class="section">
     <div class="section-title">Configuration</div>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:16px;line-height:1.6">
+      <span style="color:var(--accent)">Strategy notation:</span> each digit represents the enhancement mode chosen at that star step — e.g. <span style="color:var(--text)">3144</span> means mode 3 at 18→19, mode 1 at 19→20, mode 4 at 20→21, mode 4 at 21→22. Higher modes cost more per attempt but reduce boom chance.
+    </p>
     <div class="controls-grid">
       <div class="ctrl">
         <label>Item Level</label>
@@ -408,9 +411,9 @@
       <div class="ctrl">
         <label>Sweet Spot Weight</label>
         <select id="weight">
-          <option value="0.3">Prioritise boom safety</option>
+          <option value="0.3">Prioritize boom safety</option>
           <option value="0.5" selected>Balanced</option>
-          <option value="0.7">Prioritise cost</option>
+          <option value="0.7">Prioritize cost</option>
         </select>
       </div>
     </div>
