@@ -440,24 +440,16 @@
   <!-- Discord Export -->
   <div class="section hidden" id="exportSection">
     <div class="section-title">Discord Export</div>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:12px;line-height:1.6">Exports using your current sort, filters, and frontier selection from the table above.</p>
     <div class="filter-row">
       <div class="ctrl">
         <label>Top N Rows</label>
         <input type="number" id="discordN" value="20" min="1" max="256">
       </div>
-      <div class="ctrl">
-        <label>Frontier Only</label>
-        <select id="discordFrontier">
-          <option value="0">No</option>
-          <option value="1">Yes</option>
-        </select>
-      </div>
     </div>
     <div class="export-row">
       <button class="btn" onclick="generateDiscord()">Generate Discord Table</button>
       <button class="btn" id="copyDiscordBtn" onclick="copyDiscord()">Copy to Clipboard</button>
-      <button class="btn" onclick="copyCSV()">Copy as CSV</button>
-      <button class="btn" onclick="copyTSV()">Copy as TSV</button>
     </div>
     <div id="charWarn" class="char-warn hidden"></div>
     <div class="discord-preview" id="discordPreview"></div>
@@ -755,9 +747,22 @@
   // ─── Discord Export ───────────────────────────────────────────────────────────
   function getDiscordRows() {
     const n = parseInt(document.getElementById('discordN').value) || 20;
-    const frontierOnly = document.getElementById('discordFrontier').value === '1';
-    let data = [...results].sort((a,b) => b.score - a.score);
+    // Mirror the exact same filters as the results table
+    const frontierOnly = document.getElementById('frontierOnly').value === '1';
+    const sortCol = document.getElementById('sortCol').value;
+    const maxCostF = parseFloat(document.getElementById('fCost').value) || Infinity;
+    const maxBoomF = parseFloat(document.getElementById('fBoom').value) || Infinity;
+
+    let data = results.filter(r => r.cost <= maxCostF && r.booms <= maxBoomF);
     if (frontierOnly) data = data.filter(r => r.frontier);
+
+    data.sort((a,b) => {
+      if (sortCol === 'cost') return a.cost - b.cost;
+      if (sortCol === 'booms') return a.booms - b.booms;
+      if (sortCol === 'strategy') return parseInt(a.strategy) - parseInt(b.strategy);
+      return b.score - a.score;
+    });
+
     return data.slice(0, n);
   }
 
@@ -814,21 +819,6 @@
     const b = document.getElementById('copyDiscordBtn');
     const o = b.textContent; b.textContent = 'Copied!';
     setTimeout(()=>b.textContent=o, 1500);
-  }
-
-  function toTSV() {
-    const rows = getDiscordRows();
-    const hdr = 'Rank\tStrategy\tScore\tAvg Cost (b)\tMedian Cost (b)\tσ (b)\t2σ (b)\tAvg Booms\tCost +%\tBoom -%\tFrontier';
-    const lines = rows.map(r=>[r.rank,r.strategy,r.score.toFixed(4),r.cost.toFixed(3),r.median.toFixed(3),r.stdev.toFixed(3),(r.stdev*2).toFixed(3),r.booms.toFixed(4),r.costPct.toFixed(2),r.boomPct.toFixed(2),r.frontier?'yes':''].join('\t'));
-    return [hdr,...lines].join('\n');
-  }
-  async function copyTSV() {
-    await navigator.clipboard.writeText(toTSV());
-    alert('TSV copied!');
-  }
-  async function copyCSV() {
-    await navigator.clipboard.writeText(toTSV().replace(/\t/g,','));
-    alert('CSV copied!');
   }
 </script>
 </body>
