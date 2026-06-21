@@ -35,7 +35,6 @@
       min-height: 100vh;
     }
 
-    /* Background grid */
     body::before {
       content: '';
       position: fixed;
@@ -50,18 +49,13 @@
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
 
-    /* Header */
     header {
       padding: 36px 0 28px;
       border-bottom: 1px solid var(--border);
       margin-bottom: 32px;
     }
     .header-inner { display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
-    .header-star {
-      font-size: 48px;
-      line-height: 1;
-      filter: drop-shadow(0 0 12px rgba(245,200,66,0.6));
-    }
+    .header-star { font-size: 48px; line-height: 1; filter: drop-shadow(0 0 12px rgba(245,200,66,0.6)); }
     .header-text h1 {
       font-family: var(--sans);
       font-size: 32px;
@@ -81,7 +75,6 @@
       letter-spacing: 1px;
     }
 
-    /* Notice banner */
     .notice {
       background: rgba(245,200,66,0.07);
       border: 1px solid rgba(245,200,66,0.25);
@@ -98,7 +91,6 @@
     }
     .notice::before { content: '⚠'; font-size: 13px; }
 
-    /* Section */
     .section {
       background: var(--bg2);
       border: 1px solid var(--border);
@@ -127,7 +119,6 @@
       border-radius: 2px;
     }
 
-    /* Controls grid */
     .controls-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -158,7 +149,6 @@
     select:focus, input[type=number]:focus { border-color: var(--accent); }
     select option { background: var(--bg3); }
 
-    /* Run button */
     .run-btn {
       width: 100%;
       height: 48px;
@@ -173,21 +163,13 @@
       text-transform: uppercase;
       cursor: pointer;
       transition: opacity 0.2s, transform 0.1s;
-      position: relative;
-      overflow: hidden;
     }
     .run-btn:hover { opacity: 0.9; }
     .run-btn:active { transform: scale(0.99); }
     .run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* Progress */
     .progress-wrap { margin: 16px 0 4px; }
-    .progress-track {
-      height: 3px;
-      background: var(--bg3);
-      border-radius: 2px;
-      overflow: hidden;
-    }
+    .progress-track { height: 3px; background: var(--bg3); border-radius: 2px; overflow: hidden; }
     .progress-bar {
       height: 100%;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
@@ -204,27 +186,19 @@
       letter-spacing: 0.5px;
     }
 
-    /* Stats row */
     .stats-row {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 12px;
       margin-bottom: 20px;
     }
-    .stat-card {
-      background: var(--bg3);
-      border: 1px solid var(--border2);
-      border-radius: 6px;
-      padding: 14px 16px;
-    }
+    .stat-card { background: var(--bg3); border: 1px solid var(--border2); border-radius: 6px; padding: 14px 16px; }
     .stat-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
     .stat-value { font-family: var(--mono); font-size: 20px; font-weight: 600; color: var(--text); }
     .stat-value span { font-size: 12px; color: var(--text2); }
 
-    /* Scatter */
     #scatter { width: 100%; display: block; }
 
-    /* Table */
     .tbl-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
     thead tr { border-bottom: 1px solid var(--border); }
@@ -249,30 +223,15 @@
     .strat { color: var(--text); font-weight: 600; font-size: 14px; }
     .bar-wrap { display: flex; align-items: center; gap: 6px; }
     .bar { height: 6px; border-radius: 2px; min-width: 1px; }
-    .pill {
-      display: inline-block;
-      font-size: 10px;
-      padding: 1px 6px;
-      border-radius: 10px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
+    .pill { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 10px; font-weight: 600; letter-spacing: 0.5px; }
     .pill-green { background: rgba(61,188,124,0.15); color: var(--green); border: 1px solid rgba(61,188,124,0.2); }
     .pill-red { background: rgba(224,85,85,0.15); color: var(--red); border: 1px solid rgba(224,85,85,0.2); }
     .pill-blue { background: rgba(79,158,255,0.15); color: var(--accent); border: 1px solid rgba(79,158,255,0.2); }
     .pill-gold { background: rgba(245,200,66,0.15); color: var(--gold); border: 1px solid rgba(245,200,66,0.2); }
 
-    /* Filters */
-    .filter-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: flex-end;
-      margin-bottom: 16px;
-    }
+    .filter-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 16px; }
     .filter-row .ctrl { min-width: 130px; }
 
-    /* Export */
     .export-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
     .btn {
       height: 34px;
@@ -303,26 +262,7 @@
       display: none;
     }
     .char-warn { color: var(--red); font-size: 11px; font-family: var(--mono); margin-top: 4px; }
-
-    /* Hidden initially */
     .hidden { display: none !important; }
-
-    /* Notice banner */
-    .notice {
-      background: rgba(245,200,66,0.07);
-      border: 1px solid rgba(245,200,66,0.25);
-      border-radius: 6px;
-      padding: 10px 14px;
-      font-family: var(--mono);
-      font-size: 11px;
-      color: #c9a82a;
-      letter-spacing: 0.5px;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .notice::before { content: '⚠'; font-size: 13px; }
 
     footer {
       text-align: center;
@@ -381,12 +321,19 @@
       <div class="ctrl">
         <label>30% Discount</label>
         <select id="discount">
-          <option value="1" selected>Yes (base cost only)</option>
+          <option value="1" selected>Yes (whole cost)</option>
           <option value="0">No</option>
         </select>
       </div>
       <div class="ctrl">
-        <label>MVP Tier (Up to 15*)</label>
+        <label>Boom Reduction Event</label>
+        <select id="boomReduction">
+          <option value="1" selected>On (−30% boom rates)</option>
+          <option value="0">Off</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>MVP Tier (Up to 15★)</label>
         <select id="mvp" title="MVP discount applies to base cost only, stacks with 30% discount">
           <option value="0" selected>None</option>
           <option value="0.03">Silver (3%)</option>
@@ -434,7 +381,7 @@
   <div class="section hidden" id="scatterSection">
     <div class="section-title">Efficiency Frontier — Cost vs Booms</div>
     <p style="font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:12px;line-height:1.6">
-      <span style="color:var(--accent)">Frontier</span> strategies are ones where you can't reduce booms without spending more meso, and can't spend less without accepting more booms.
+      <span style="color:var(--accent)">Frontier</span> strategies are ones where you can't reduce booms without spending more meso, and can't spend less without accepting more booms. Everything off the frontier is dominated — some other strategy beats it on both cost and safety simultaneously.
     </p>
     <svg id="scatter" viewBox="0 0 800 300"></svg>
   </div>
@@ -442,7 +389,6 @@
   <!-- Results -->
   <div class="section hidden" id="resultsSection">
     <div class="section-title">Strategy Rankings</div>
-
     <div class="filter-row">
       <div class="ctrl">
         <label>Sort By</label>
@@ -469,7 +415,6 @@
         <input type="number" id="fBoom" placeholder="e.g. 2.0" step="0.1" oninput="renderTable()">
       </div>
     </div>
-
     <div class="tbl-wrap">
       <table>
         <thead>
@@ -520,10 +465,10 @@
 
   <footer>StarForce Enhancement Mode Simulator · 18★→22★ · Monte Carlo · made by poe 🐸<br>Game data and base cost calculation sourced from <a href="https://github.com/brendonmay/brendonmay.github.io" target="_blank" style="color:var(--accent);text-decoration:none">github.com/brendonmay/brendonmay.github.io</a></footer>
 
-</div><!-- /container -->
+</div>
 
 <script>
-  // ─── Game Data ───────────────────────────────────────────────────────────────
+  // ─── Game Data ────────────────────────────────────────────────────────────────
   const kmsRates = {
     0:[0.95,0.05,0,0],1:[0.9,0.1,0,0],2:[0.85,0.15,0,0],3:[0.85,0.15,0,0],
     4:[0.80,0.2,0,0],5:[0.75,0.25,0,0],6:[0.7,0.3,0,0],7:[0.65,0.35,0,0],
@@ -534,24 +479,17 @@
     19:[0.15,0.765,0,0.085],20:[0.3,0.595,0,0.105],21:[0.15,0.7225,0,0.1275]
   };
 
-  // Mode success rates [mode1, mode2, mode3, mode4] per star
   const succRates = {
-    18:[0.15,0.12,0.10,0.08],
-    19:[0.15,0.12,0.10,0.08],
-    20:[0.30,0.25,0.20,0.15],
-    21:[0.15,0.12,0.10,0.08]
+    18:[0.15,0.12,0.10,0.08],19:[0.15,0.12,0.10,0.08],
+    20:[0.30,0.25,0.20,0.15],21:[0.15,0.12,0.10,0.08]
   };
-  // Mode destroy rates [mode1, mode2, mode3, mode4] per star
   const destRates = {
-    18:[0.068,0.044,0.018,0],
-    19:[0.085,0.0616,0.036,0],
-    20:[0.105,0.075,0.040,0],
-    21:[0.1275,0.088,0.045,0]
+    18:[0.068,0.044,0.018,0],19:[0.085,0.0616,0.036,0],
+    20:[0.105,0.075,0.040,0],21:[0.1275,0.088,0.045,0]
   };
-  // Cost multipliers [mode1..4] — extra above base is NOT discounted
   const costMults = {18:[1,2,3.5,6.5],19:[1,2,3.5,6.5],20:[1,2,3.5,6.5],21:[1,2,3.5,6.5]};
 
-  // ─── Meso Formulas ───────────────────────────────────────────────────────────
+  // ─── Meso Formulas ────────────────────────────────────────────────────────────
   function makeMesoFn(divisor, starExp=2.7, extraMult=1) {
     return (star, lv) => 100 * Math.round(
             extraMult * (Math.floor(lv/10)*10)**3 * ((star+1)**starExp) / divisor + 10
@@ -575,16 +513,17 @@
   const baseFns = [18,19,20,21].map(s => kmsMesoFn(s));
 
   // ─── Attempt Cost (18-21★) ────────────────────────────────────────────────────
-  // 30% event discount applies to BASE cost only; mode premium is full price
+  // 30% event discount applies to WHOLE cost (base × mult × disc)
   // MVP discount does NOT apply here (only covers stars 1-15)
   function attemptCost(star, modeIdx, lv, disc) {
     const base = baseFns[star - 18](star, lv);
     const mult = costMults[star][modeIdx];
-    return base * (disc + mult - 1);
+    return base * mult * disc;
   }
 
   // ─── Reclimb Cost (12→18) ────────────────────────────────────────────────────
-  // MVP discount applies here (stars 12-17 are all ≤15 or covered by wiki range)
+  // MVP discount applies here (stars 12-17 fall in 1-15 range)
+  // Safeguard: discount applies to base only, safeguard premium is full price
   let climbCache = {};
   function climbCost(lv, disc, mvpDisc, useSG, useSC) {
     const key = `${lv}_${disc}_${mvpDisc}_${useSG}_${useSC}`;
@@ -595,7 +534,6 @@
       const [sr] = kmsRates[s];
       const isSG = useSG && s >= 15 && s <= 17;
       const base = fn(s, lv);
-      // Combined discount for reclimb: event disc + MVP disc, base cost only
       const reclimbDisc = disc * (1 - mvpDisc);
       const cost = isSG ? base * (reclimbDisc + 1) : base * reclimbDisc;
       const succ = useSC ? Math.min(sr * 1.05, 1) : sr;
@@ -604,18 +542,19 @@
     return climbCache[key] = c;
   }
 
-  // ─── Simulate one strategy ───────────────────────────────────────────────────
-  function simulate(modes, lv, n, disc, mvpDisc, useSC, useSG) {
+  // ─── Simulate one strategy ────────────────────────────────────────────────────
+  function simulate(modes, lv, n, disc, mvpDisc, useSC, useSG, useBoomReduction) {
     let tc = 0, tb = 0, tc2 = 0;
     const costs = new Float64Array(n);
     const cc = climbCost(lv, disc, mvpDisc, useSG, useSC);
+    const boomMult = useBoomReduction ? 0.7 : 1.0;
     for (let i = 0; i < n; i++) {
       let cost = 0, booms = 0, star = 18, mi = 0;
       while (star < 22) {
         const m = modes[mi] - 1;
         let succ = succRates[star][m];
         if (useSC) succ = succ * 1.05;
-        const dest = destRates[star][m];
+        const dest = destRates[star][m] * boomMult;
         cost += attemptCost(star, m, lv, disc);
         const r = Math.random();
         if (r < succ) {
@@ -634,7 +573,6 @@
     const avg = tc / n;
     const variance = (tc2 / n) - (avg * avg);
     const stdev = Math.sqrt(Math.max(0, variance)) / 1e9;
-    // Median
     costs.sort();
     const median = (n % 2 === 0
             ? (costs[n/2 - 1] + costs[n/2]) / 2
@@ -642,20 +580,20 @@
     return { cost: avg / 1e9, booms: tb / n, stdev, median };
   }
 
-  // ─── State ───────────────────────────────────────────────────────────────────
-  let results = [], sortKey = 'score', sortDir = 'asc';
+  // ─── State ────────────────────────────────────────────────────────────────────
+  let results = [];
 
-  // ─── Run ─────────────────────────────────────────────────────────────────────
+  // ─── Run ──────────────────────────────────────────────────────────────────────
   async function runSim() {
     climbCache = {}; results = [];
     const lv   = parseInt(document.getElementById('itemLevel').value) || 250;
     const n    = parseInt(document.getElementById('simCount').value) || 10000;
     const useDisc = document.getElementById('discount').value === '1';
     const mvpDisc = parseFloat(document.getElementById('mvp').value) || 0;
-    // Event discount applies to all base costs; MVP only applies to reclimb (stars 1-15)
     const disc = useDisc ? 0.7 : 1.0;
     const useSC  = document.getElementById('starcatch').value === '1';
     const useSG  = document.getElementById('safeguard').value === '1';
+    const useBoomReduction = document.getElementById('boomReduction').value === '1';
 
     ['statsSection','scatterSection','resultsSection','exportSection'].forEach(id =>
             document.getElementById(id).classList.add('hidden'));
@@ -673,7 +611,7 @@
     let done = 0;
     for (let i = 0; i < strats.length; i += 8) {
       for (const m of strats.slice(i, i+8)) {
-        const r = simulate(m, lv, n, disc, mvpDisc, useSC, useSG);
+        const r = simulate(m, lv, n, disc, mvpDisc, useSC, useSG, useBoomReduction);
         results.push({ strategy: m.join(''), modes: m, cost: r.cost, booms: r.booms, stdev: r.stdev, median: r.median });
         done++;
       }
@@ -685,7 +623,6 @@
     prog.style.width = '100%';
     btn.disabled = false;
 
-    // Score
     const w = parseFloat(document.getElementById('weight').value) || 0.5;
     const base = results.find(r => r.strategy === '1111');
     const maxCost = Math.max(...results.map(r => r.cost));
@@ -696,7 +633,6 @@
       r.boomPct = (1 - r.booms / base.booms) * 100;
     });
 
-    // Frontier
     const byCost = [...results].sort((a,b) => a.cost - b.cost);
     let minBoom = Infinity;
     byCost.forEach(r => { r.frontier = r.booms < minBoom; if (r.frontier) minBoom = r.booms; });
@@ -706,7 +642,7 @@
 
     status.textContent = `Done — 256 strategies × ${n.toLocaleString()} runs | 1111 baseline: ${base.cost.toFixed(2)}b avg, ${base.booms.toFixed(2)} avg booms`;
 
-    showStats(base, lv, n, useDisc, mvpDisc, useSC, useSG);
+    showStats(base, lv, n, useDisc, mvpDisc, useSC, useBoomReduction);
     drawScatter();
     renderTable();
 
@@ -714,17 +650,17 @@
             document.getElementById(id).classList.remove('hidden'));
   }
 
-  // ─── Stats ───────────────────────────────────────────────────────────────────
-  function showStats(base, lv, n, useDisc, mvpDisc, useSC, useSG) {
+  // ─── Stats ────────────────────────────────────────────────────────────────────
+  function showStats(base, lv, n, useDisc, mvpDisc, useSC, useBoomReduction) {
     const best = [...results].sort((a,b) => b.score - a.score)[0];
     const cheapest = [...results].sort((a,b) => a.cost - b.cost)[0];
     const safest = [...results].sort((a,b) => a.booms - b.booms)[0];
-    const mvpLabel = mvpDisc > 0 ? ` + MVP ${(mvpDisc*100).toFixed(0)}%` : '';
-    const discLabel = useDisc ? `30%${mvpLabel}` : (mvpDisc > 0 ? `MVP ${(mvpDisc*100).toFixed(0)}%` : 'None');
+    const discLabel = useDisc ? '30%' : 'None';
     document.getElementById('statsRow').innerHTML = `
     <div class="stat-card"><div class="stat-label">Item Level</div><div class="stat-value">${lv} <span>lv</span></div></div>
     <div class="stat-card"><div class="stat-label">Simulations</div><div class="stat-value">${(n*256).toLocaleString()} <span>total</span></div></div>
     <div class="stat-card"><div class="stat-label">Discount</div><div class="stat-value">${discLabel} <span>${useSC?'+ SC':''}</span></div></div>
+    <div class="stat-card"><div class="stat-label">Boom Event</div><div class="stat-value">${useBoomReduction?'On':'Off'} <span>−30%</span></div></div>
     <div class="stat-card"><div class="stat-label">Baseline (1111)</div><div class="stat-value">${base.cost.toFixed(1)} <span>b avg</span></div></div>
     <div class="stat-card"><div class="stat-label">Best Sweet Spot</div><div class="stat-value">${best.strategy} <span>${best.cost.toFixed(1)}b</span></div></div>
     <div class="stat-card"><div class="stat-label">Cheapest</div><div class="stat-value">${cheapest.strategy} <span>${cheapest.cost.toFixed(1)}b</span></div></div>
@@ -732,7 +668,7 @@
   `;
   }
 
-  // ─── Scatter ─────────────────────────────────────────────────────────────────
+  // ─── Scatter ──────────────────────────────────────────────────────────────────
   function drawScatter() {
     const svg = document.getElementById('scatter');
     const W=800, H=300, pad={l:55,r:20,t:20,b:40};
@@ -744,7 +680,6 @@
     const cy=v=>ch-(v-minB)/(maxB-minB)*ch+pad.t;
 
     let html = '';
-    // Grid
     for(let i=0;i<=5;i++){
       const xv=minC+(maxC-minC)*i/5, xp=cx(xv);
       html+=`<line x1="${xp}" y1="${pad.t}" x2="${xp}" y2="${pad.t+ch}" stroke="#1e2438" stroke-width="1"/>`;
@@ -753,21 +688,17 @@
       html+=`<line x1="${pad.l}" y1="${yp}" x2="${pad.l+cw}" y2="${yp}" stroke="#1e2438" stroke-width="1"/>`;
       html+=`<text x="${pad.l-6}" y="${yp+3}" text-anchor="end" font-size="9" fill="#4a5270" font-family="Share Tech Mono">${yv.toFixed(2)}</text>`;
     }
-    // Axis labels
     html+=`<text x="${pad.l+cw/2}" y="${H-1}" text-anchor="middle" font-size="10" fill="#7a84a8" font-family="Share Tech Mono">avg cost (b)</text>`;
     html+=`<text x="12" y="${pad.t+ch/2}" text-anchor="middle" font-size="10" fill="#7a84a8" font-family="Share Tech Mono" transform="rotate(-90,12,${pad.t+ch/2})">avg booms</text>`;
 
-    // Non-frontier dots
     results.filter(r=>!r.frontier).forEach(r=>{
       html+=`<circle cx="${cx(r.cost)}" cy="${cy(r.booms)}" r="2.5" fill="#2a3048" stroke="#3d4870" stroke-width="0.5" opacity="0.8"/>`;
     });
 
-    // Frontier line
     const fr=[...results].filter(r=>r.frontier).sort((a,b)=>a.cost-b.cost);
     if(fr.length>1){
       html+=`<polyline points="${fr.map(r=>`${cx(r.cost)},${cy(r.booms)}`).join(' ')}" fill="none" stroke="#4f9eff" stroke-width="1" opacity="0.4" stroke-dasharray="4 2"/>`;
     }
-    // Frontier dots + labels
     fr.forEach(r=>{
       html+=`<circle cx="${cx(r.cost)}" cy="${cy(r.booms)}" r="4" fill="#4f9eff" opacity="0.9"/>`;
       html+=`<text x="${cx(r.cost)}" y="${cy(r.booms)-7}" text-anchor="middle" font-size="8" fill="#4f9eff" font-family="Share Tech Mono">${r.strategy}</text>`;
@@ -835,10 +766,12 @@
     const lv = document.getElementById('itemLevel').value;
     const useDisc = document.getElementById('discount').value === '1';
     const mvpDisc = parseFloat(document.getElementById('mvp').value) || 0;
+    const useBoomReduction = document.getElementById('boomReduction').value === '1';
     const n = document.getElementById('simCount').value;
     const mvpLabel = mvpDisc > 0 ? ` + MVP ${(mvpDisc*100).toFixed(0)}%` : '';
-    const discLabel = useDisc ? `30% discount (base only)${mvpLabel}` : (mvpDisc > 0 ? `MVP ${(mvpDisc*100).toFixed(0)}% (base only)` : 'No discount');
-    const header = `lv${lv} item | 22★ | ${discLabel} | ${parseInt(n).toLocaleString()} sims per strategy`;
+    const discLabel = useDisc ? `30% discount${mvpLabel}` : (mvpDisc > 0 ? `MVP ${(mvpDisc*100).toFixed(0)}%` : 'No discount');
+    const boomLabel = useBoomReduction ? ' | boom event on' : '';
+    const header = `lv${lv} item | 22★ | ${discLabel}${boomLabel} | ${parseInt(n).toLocaleString()} sims per strategy`;
     const cols = ['Rnk','Strat','Score','Avg(b)','Med(b)','σ(b)','2σ(b)','Booms','Cost+%','Boom-%'];
     const rowData = rows.map(r => [
       String(r.rank).padStart(3),
