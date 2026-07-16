@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StarForce Full Path Simulator</title>
+<title>StarForce Range Simulator</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -127,7 +127,7 @@ footer { text-align: center; padding: 32px 0; font-family: var(--mono); font-siz
       <div class="header-star">🐸</div>
       <div class="header-text">
         <h1>Starforce Range Simulator</h1>
-        <p>0★ → 30★ · Custom range · Enhancement Mode · Monte Carlo</p>
+        <p>0★ → 28★ · Custom range · Enhancement Mode · Monte Carlo</p>
       </div>
     </div>
     <a href="index.html" class="nav-btn">← Enhancement Mode Sim</a>
@@ -174,8 +174,22 @@ footer { text-align: center; padding: 32px 0; font-family: var(--mono); font-siz
         <option value="0.10">Diamond (10%)</option>
       </select>
     </div>
+    <p style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:16px">Max end star capped at 28★ — calculations beyond this become extremely slow due to low success rates at high stars.</p>
   </div>
-  <p style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:16px">Max end star capped at 28★ — calculations beyond this become extremely slow due to low success rates at high stars.</p>
+
+  <div style="font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:8px">Simulation Mode</div>
+  <div class="toggle-row" style="margin-bottom:8px">
+    <button class="toggle-btn active-orange" id="btnModeInf" onclick="setSimMode('infinite')">Infinite Spares — keep going until target</button>
+    <button class="toggle-btn" id="btnModeFin" onclick="setSimMode('finite')">Finite Spares — stop when spares run out</button>
+  </div>
+  <div id="sparesWrap" style="display:none;margin-bottom:8px">
+    <div class="ctrl" style="max-width:180px">
+      <label>Number of Spares</label>
+      <input type="number" id="spareCount" value="1" min="0" max="128" step="1">
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:6px">0 spares = stop on first boom. N spares = allow up to N booms before session ends.</div>
+  </div>
+  <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:20px" id="simModeNote">Infinite: expects unlimited items. Finite: models one tapping session — ends when target is hit or all spares are consumed.</div>
 
   <div style="font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:8px">Event Toggles</div>
   <div class="toggle-row" style="margin-bottom:20px">
@@ -222,18 +236,25 @@ footer { text-align: center; padding: 32px 0; font-family: var(--mono); font-siz
 </div>
 
 <footer>
-  StarForce Range Simulator · 0★→30★ · Monte Carlo · made by poe 🐸<br>
+  StarForce Range Simulator · 0★→28★ · Monte Carlo · made by poe 🐸<br>
   Game data and base cost calculation sourced from <a href="https://github.com/brendonmay/brendonmay.github.io" target="_blank" style="color:var(--accent);text-decoration:none">github.com/brendonmay/brendonmay.github.io</a>
 </footer>
 </div>
 
 <script>
 // ─── Toggle state ─────────────────────────────────────────────────────────────
-const state = { discount: true, boomReduction: true, starcatch: true, safeguard: true, emode: '4444' };
+const state = { discount: true, boomReduction: true, starcatch: true, safeguard: true, emode: '4444', simMode: 'infinite' };
 
 function toggle(key, btnId, cls) {
   state[key] = !state[key];
   document.getElementById(btnId).classList.toggle(cls, state[key]);
+}
+
+function setSimMode(mode) {
+  state.simMode = mode;
+  document.getElementById('btnModeInf').classList.toggle('active-orange', mode === 'infinite');
+  document.getElementById('btnModeFin').classList.toggle('active-orange', mode === 'finite');
+  document.getElementById('sparesWrap').style.display = mode === 'finite' ? 'block' : 'none';
 }
 
 function setEmode(val) {
@@ -297,7 +318,7 @@ function kmsMesoFn(s) {
 
 // ─── Cost + rates for one star ────────────────────────────────────────────────
 function getStepInfo(star, lv) {
-  const disc = state.discount ? 0.7 : 1.0;
+  const disc = state.discount && star <= 22 ? 0.7 : 1.0;
   const mvpDisc = parseFloat(document.getElementById('mvp').value) || 0;
   const useSC = state.starcatch;
   const useBR = state.boomReduction;
@@ -347,10 +368,12 @@ function getStepInfo(star, lv) {
 
 // ─── Simulate ─────────────────────────────────────────────────────────────────
 async function runSim() {
-  const startStar = Math.max(0, Math.min(29, parseInt(document.getElementById('startStar').value) || 0));
-  const endStar   = Math.max(1, Math.min(30, parseInt(document.getElementById('endStar').value) || 22));
+  const startStar = Math.max(0, Math.min(27, parseInt(document.getElementById('startStar').value) || 0));
+  const endStar   = Math.max(1, Math.min(28, parseInt(document.getElementById('endStar').value) || 22));
   const lv  = parseInt(document.getElementById('itemLevel').value) || 250;
   const n   = parseInt(document.getElementById('simCount').value) || 10000;
+  const finite = state.simMode === 'finite';
+  const maxBooms = finite ? Math.max(0, parseInt(document.getElementById('spareCount').value) || 0) : Infinity;
 
   if (endStar <= startStar) {
     document.getElementById('status').textContent = 'Error: End star must be greater than start star.';
@@ -362,7 +385,7 @@ async function runSim() {
   const status = document.getElementById('status');
   document.getElementById('runBtn').disabled = true;
   prog.style.width = '0%';
-  status.textContent = `Simulating ${n.toLocaleString()} runs (${startStar}★ → ${endStar}★)…`;
+  status.textContent = `Simulating ${n.toLocaleString()} runs (${startStar}★ → ${endStar}★, ${finite ? `finite · ${maxBooms} spare${maxBooms!==1?'s':''}` : 'infinite'})…`;
   await new Promise(r => setTimeout(r, 0));
 
   const steps = endStar - startStar;
@@ -372,11 +395,17 @@ async function runSim() {
   const segCost  = new Float64Array(steps);
   const segBooms = new Float64Array(steps);
 
+  // Finite mode extras
+  let successCount = 0;
+  let tcSuccess=0, tcBoom=0, boomRunCost=0;
+
   const CHUNK = 200;
   for (let ci = 0; ci < n; ci += CHUNK) {
     const cEnd = Math.min(ci + CHUNK, n);
     for (let i = ci; i < cEnd; i++) {
       let cost = 0, boomCount = 0, star = startStar;
+      let hitTarget = false;
+
       while (star < endStar) {
         const si = Math.min(star - startStar, steps - 1);
         const { cost: ac, succ, boom } = getStepInfo(star, lv);
@@ -388,11 +417,22 @@ async function runSim() {
         } else if (r < succ + boom) {
           boomCount++;
           segBooms[si]++;
+          if (finite && boomCount > maxBooms) {
+            // used all spares
+            break;
+          }
           const restoreTo = boomRestoreTo[star] ?? 12;
           star = Math.max(startStar, restoreTo);
         }
         // else maintain
       }
+
+      if (finite) {
+        hitTarget = star >= endStar;
+        if (hitTarget) { successCount++; tcSuccess += cost; }
+        else { tcBoom += cost; }
+      }
+
       costs[i] = cost; booms[i] = boomCount;
       tcSum += cost; bSum += boomCount;
       tc2 += cost*cost; b2 += boomCount*boomCount;
@@ -416,9 +456,15 @@ async function runSim() {
   const p95Cost  = costs[Math.floor(n*0.95)]/1e9;
   const p95Booms = booms[Math.floor(n*0.95)];
 
+  const finiteExtra = finite ? {
+    successRate: successCount / n,
+    avgCostOnSuccess: successCount > 0 ? tcSuccess/successCount/1e9 : 0,
+    avgCostOnBoom: (n - successCount) > 0 ? tcBoom/(n-successCount)/1e9 : 0,
+  } : null;
+
   status.textContent = `Done — ${n.toLocaleString()} runs | avg: ${avgCost.toFixed(2)}b | median: ${medCost.toFixed(2)}b | avg booms: ${avgBooms.toFixed(2)}`;
 
-  renderCards({ avgCost, medCost, stdevCost, p95Cost, avgBooms, medBooms, stdevBooms, p95Booms, n, startStar, endStar });
+  renderCards({ avgCost, medCost, stdevCost, p95Cost, avgBooms, medBooms, stdevBooms, p95Booms, n, startStar, endStar, finite, finiteExtra, maxBooms });
   drawHist('costHist', costs, n, 'cost', avgCost, medCost);
   drawHist('boomHist', booms, n, 'booms', avgBooms, medBooms);
   document.getElementById('costHistLabel').textContent = `Cost distribution — ${n.toLocaleString()} runs`;
@@ -427,10 +473,29 @@ async function runSim() {
   document.getElementById('resultsSection').classList.remove('hidden');
 }
 
-function renderCards({ avgCost, medCost, stdevCost, p95Cost, avgBooms, medBooms, stdevBooms, p95Booms, n, startStar, endStar }) {
+function renderCards({ avgCost, medCost, stdevCost, p95Cost, avgBooms, medBooms, stdevBooms, p95Booms, n, startStar, endStar, finite, finiteExtra, maxBooms }) {
+  let extraCards = '';
+  if (finite && finiteExtra) {
+    extraCards = `
+    <div class="result-card" style="border-color:var(--gold);background:rgba(245,200,66,0.06)">
+      <div class="result-label">Hit Target Rate</div>
+      <div class="result-value">${(finiteExtra.successRate*100).toFixed(1)}<span>%</span></div>
+      <div class="result-sub">with ${maxBooms} spare${maxBooms!==1?'s':''} → ${endStar}★</div>
+    </div>
+    <div class="result-card">
+      <div class="result-label">Avg Cost if Hit</div>
+      <div class="result-value">${finiteExtra.avgCostOnSuccess.toFixed(2)}<span>b</span></div>
+      <div class="result-sub">successful sessions only</div>
+    </div>
+    <div class="result-card">
+      <div class="result-label">Avg Cost if Fail</div>
+      <div class="result-value">${finiteExtra.avgCostOnBoom.toFixed(2)}<span>b</span></div>
+      <div class="result-sub">sessions that ran out of spares</div>
+    </div>`;
+  }
   document.getElementById('resultsGrid').innerHTML = `
     <div class="result-card hi">
-      <div class="result-label">Avg Cost</div>
+      <div class="result-label">Avg Cost / Item</div>
       <div class="result-value">${avgCost.toFixed(2)}<span>b</span></div>
       <div class="result-sub">σ ±${stdevCost.toFixed(2)}b</div>
     </div>
@@ -445,7 +510,7 @@ function renderCards({ avgCost, medCost, stdevCost, p95Cost, avgBooms, medBooms,
       <div class="result-sub">budget for 95% of runs</div>
     </div>
     <div class="result-card hi2">
-      <div class="result-label">Avg Booms</div>
+      <div class="result-label">Avg Booms / Item</div>
       <div class="result-value">${avgBooms.toFixed(2)}</div>
       <div class="result-sub">σ ±${stdevBooms.toFixed(2)}</div>
     </div>
@@ -457,8 +522,9 @@ function renderCards({ avgCost, medCost, stdevCost, p95Cost, avgBooms, medBooms,
     <div class="result-card">
       <div class="result-label">95th %ile Booms</div>
       <div class="result-value">${p95Booms}</div>
-      <div class="result-sub">${startStar}★ → ${endStar}★ · ${(n/1000).toFixed(0)}k sims</div>
+      <div class="result-sub">${startStar}★→${endStar}★ · ${(n/1000).toFixed(0)}k sims</div>
     </div>
+    ${extraCards}
   `;
 }
 
