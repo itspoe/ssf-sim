@@ -140,11 +140,11 @@ footer { text-align: center; padding: 32px 0; font-family: var(--mono); font-siz
   <div class="controls-grid">
     <div class="ctrl">
       <label>Start Star</label>
-      <input type="number" id="startStar" value="0" min="0" max="29" step="1">
+      <input type="number" id="startStar" value="0" min="0" max="27" step="1">
     </div>
     <div class="ctrl">
       <label>End Star</label>
-      <input type="number" id="endStar" value="22" min="1" max="30" step="1">
+      <input type="number" id="endStar" value="22" min="1" max="28" step="1">
     </div>
     <div class="ctrl">
       <label>Item Level</label>
@@ -175,6 +175,7 @@ footer { text-align: center; padding: 32px 0; font-family: var(--mono); font-siz
       </select>
     </div>
   </div>
+  <p style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:16px">Max end star capped at 28★ — calculations beyond this become extremely slow due to low success rates at high stars.</p>
 
   <div style="font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:8px">Event Toggles</div>
   <div class="toggle-row" style="margin-bottom:20px">
