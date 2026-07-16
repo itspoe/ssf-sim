@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StarForce Full Path Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0c10;
+  --bg2: #111520;
+  --bg3: #181d2a;
+  --border: #2a3048;
+  --border2: #1e2438;
+  --accent: #4f9eff;
+  --accent2: #7b5ea7;
+  --gold: #f5c842;
+  --red: #e05555;
+  --green: #3dbc7c;
+  --orange: #f0893a;
+  --text: #d4daf0;
+  --text2: #7a84a8;
+  --text3: #4a5270;
+  --mono: 'Share Tech Mono', monospace;
+  --sans: 'Rajdhani', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.5; min-height: 100vh; }
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(rgba(79,158,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(79,158,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+.container { max-width: 1000px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+header { padding: 36px 0 28px; border-bottom: 1px solid var(--border); margin-bottom: 28px; }
+.header-inner { display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap; justify-content: space-between; }
+.header-left { display: flex; align-items: flex-end; gap: 20px; }
+.header-star { font-size: 48px; line-height: 1; filter: drop-shadow(0 0 12px rgba(240,137,58,0.7)); }
+.header-text h1 {
+  font-family: var(--sans); font-size: 30px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  background: linear-gradient(135deg, #fff 0%, var(--orange) 60%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.header-text p { font-family: var(--mono); font-size: 11px; color: var(--text2); margin-top: 4px; letter-spacing: 1px; }
+.nav-btn {
+  height: 36px; padding: 0 16px; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--text2); font-family: var(--mono); font-size: 12px; cursor: pointer; text-decoration: none;
+  display: flex; align-items: center; gap: 6px; white-space: nowrap; transition: border-color 0.2s, color 0.2s;
+}
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.section { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 20px; }
+.section-title {
+  font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 16px; font-family: var(--mono); display: flex; align-items: center; gap: 8px;
+}
+.section-title::before { content: ''; display: inline-block; width: 3px; height: 12px; background: var(--accent); border-radius: 2px; }
+
+.controls-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.ctrl { display: flex; flex-direction: column; gap: 5px; }
+.ctrl label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--text2); font-family: var(--mono); }
+select, input[type=number] {
+  height: 38px; padding: 0 10px; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--text); font-family: var(--mono); font-size: 13px; outline: none; transition: border-color 0.2s; width: 100%;
+}
+select:focus, input[type=number]:focus { border-color: var(--accent); }
+select option { background: var(--bg3); }
+
+.toggle-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.toggle-btn {
+  height: 36px; padding: 0 16px; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--text2); font-family: var(--mono); font-size: 12px; cursor: pointer; transition: all 0.15s;
+}
+.toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.toggle-btn.active-green { background: rgba(61,188,124,0.12); border-color: var(--green); color: var(--green); }
+.toggle-btn.active-orange { background: rgba(240,137,58,0.12); border-color: var(--orange); color: var(--orange); }
+
+.run-btn {
+  width: 100%; height: 48px; background: linear-gradient(135deg, var(--orange) 0%, var(--accent2) 100%);
+  border: none; border-radius: 6px; color: #fff; font-family: var(--sans); font-size: 16px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: opacity 0.2s, transform 0.1s;
+}
+.run-btn:hover { opacity: 0.9; }
+.run-btn:active { transform: scale(0.99); }
+.run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.progress-track { height: 3px; background: var(--bg3); border-radius: 2px; overflow: hidden; margin-top: 14px; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--orange), var(--accent2)); border-radius: 2px; width: 0%; transition: width 0.1s; }
+.status-line { font-family: var(--mono); font-size: 11px; color: var(--text2); margin-top: 6px; min-height: 16px; }
+
+.results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.result-card { background: var(--bg3); border: 1px solid var(--border2); border-radius: 6px; padding: 14px 16px; }
+.result-card.hi { border-color: var(--orange); background: rgba(240,137,58,0.06); }
+.result-card.hi2 { border-color: var(--accent); background: rgba(79,158,255,0.06); }
+.result-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+.result-value { font-family: var(--mono); font-size: 22px; font-weight: 600; color: var(--text); }
+.result-value span { font-size: 12px; color: var(--text2); }
+.result-sub { font-family: var(--mono); font-size: 11px; color: var(--text2); margin-top: 3px; }
+
+.hist-label { font-family: var(--mono); font-size: 11px; color: var(--text2); margin-bottom: 8px; letter-spacing: 0.5px; }
+.hist-svg { width: 100%; display: block; margin-bottom: 24px; }
+
+.breakdown-wrap { overflow-x: auto; }
+.breakdown-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
+.breakdown-table th { padding: 6px 10px; text-align: left; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); white-space: nowrap; }
+.breakdown-table td { padding: 5px 10px; border-bottom: 1px solid var(--border2); white-space: nowrap; }
+.breakdown-table tr:hover td { background: rgba(79,158,255,0.04); }
+.emode-cell { color: var(--orange); }
+.sg-cell { color: var(--green); }
+
+.hidden { display: none !important; }
+
+footer { text-align: center; padding: 32px 0; font-family: var(--mono); font-size: 11px; color: var(--text3); letter-spacing: 1px; border-top: 1px solid var(--border2); margin-top: 32px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="header-star">🐸</div>
+      <div class="header-text">
+        <h1>Starforce Range Simulator</h1>
+        <p>0★ → 30★ · Custom range · Enhancement Mode · Monte Carlo</p>
+      </div>
+    </div>
+    <a href="index.html" class="nav-btn">← Enhancement Mode Sim</a>
+  </div>
+</header>
+
+<div class="section">
+  <div class="section-title">Configuration</div>
+
+  <div class="controls-grid">
+    <div class="ctrl">
+      <label>Start Star</label>
+      <input type="number" id="startStar" value="0" min="0" max="29" step="1">
+    </div>
+    <div class="ctrl">
+      <label>End Star</label>
+      <input type="number" id="endStar" value="22" min="1" max="30" step="1">
+    </div>
+    <div class="ctrl">
+      <label>Item Level</label>
+      <select id="itemLevel">
+        <option value="140">140</option>
+        <option value="150">150</option>
+        <option value="160">160</option>
+        <option value="200">200</option>
+        <option value="250" selected>250</option>
+      </select>
+    </div>
+    <div class="ctrl">
+      <label>Simulations</label>
+      <select id="simCount">
+        <option value="1000">1,000</option>
+        <option value="5000">5,000</option>
+        <option value="10000" selected>10,000</option>
+        <option value="20000">20,000</option>
+      </select>
+    </div>
+    <div class="ctrl">
+      <label>MVP Tier (≤16★)</label>
+      <select id="mvp">
+        <option value="0" selected>None</option>
+        <option value="0.03">Silver (3%)</option>
+        <option value="0.05">Gold (5%)</option>
+        <option value="0.10">Diamond (10%)</option>
+      </select>
+    </div>
+  </div>
+
+  <div style="font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:8px">Event Toggles</div>
+  <div class="toggle-row" style="margin-bottom:20px">
+    <button class="toggle-btn active-green" id="btn30" onclick="toggle('discount','btn30','active-green')">30% Discount (≤22★)</button>
+    <button class="toggle-btn active-green" id="btnBR" onclick="toggle('boomReduction','btnBR','active-green')">−30% Boom Rates</button>
+    <button class="toggle-btn active-green" id="btnSC" onclick="toggle('starcatch','btnSC','active-green')">Star Catching</button>
+  </div>
+
+  <div style="font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:8px">Safeguard (15★–17★)</div>
+  <div class="toggle-row" style="margin-bottom:4px">
+    <button class="toggle-btn active-green" id="btnSG" onclick="toggle('safeguard','btnSG','active-green')">On — 2× cost, 0% boom at 15/16/17★</button>
+  </div>
+  <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:20px">Only applies if your range includes these stars.</div>
+
+  <div style="font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:8px">Enhancement Mode (18★–21★)</div>
+  <div class="toggle-row" style="margin-bottom:4px">
+    <button class="toggle-btn" id="btnE1" onclick="setEmode('off')">Off (1111 — baseline)</button>
+    <button class="toggle-btn active-orange" id="btnE4" onclick="setEmode('4444')">Max Safe (4444 — 6.5× cost, 0% boom)</button>
+  </div>
+  <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:20px">Only applies to 18→19, 19→20, 20→21, 21→22 steps. Steps beyond 22★ always use baseline rates.</div>
+
+  <button class="run-btn" id="runBtn" onclick="runSim()">▶ Run Simulation</button>
+  <div class="progress-track"><div class="progress-bar" id="prog"></div></div>
+  <div class="status-line" id="status">Configure settings above and run.</div>
+</div>
+
+<div class="section hidden" id="resultsSection">
+  <div class="section-title">Results</div>
+  <div class="results-grid" id="resultsGrid"></div>
+  <div class="hist-label" id="costHistLabel"></div>
+  <svg id="costHist" class="hist-svg" viewBox="0 0 700 200"></svg>
+  <div class="hist-label" id="boomHistLabel"></div>
+  <svg id="boomHist" class="hist-svg" viewBox="0 0 700 200"></svg>
+  <div class="section-title" style="margin-top:8px">Per-Step Breakdown</div>
+  <div class="breakdown-wrap">
+    <table class="breakdown-table">
+      <thead><tr>
+        <th>Step</th><th>Type</th><th>Success %</th><th>Boom %</th>
+        <th>Avg Cost</th><th>Avg Booms</th>
+      </tr></thead>
+      <tbody id="breakdownBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<footer>
+  StarForce Range Simulator · 0★→30★ · Monte Carlo · made by poe 🐸<br>
+  Game data and base cost calculation sourced from <a href="https://github.com/brendonmay/brendonmay.github.io" target="_blank" style="color:var(--accent);text-decoration:none">github.com/brendonmay/brendonmay.github.io</a>
+</footer>
+</div>
+
+<script>
+// ─── Toggle state ─────────────────────────────────────────────────────────────
+const state = { discount: true, boomReduction: true, starcatch: true, safeguard: true, emode: '4444' };
+
+function toggle(key, btnId, cls) {
+  state[key] = !state[key];
+  document.getElementById(btnId).classList.toggle(cls, state[key]);
+}
+
+function setEmode(val) {
+  state.emode = val;
+  document.getElementById('btnE1').classList.toggle('active-orange', val === 'off');
+  document.getElementById('btnE4').classList.toggle('active-orange', val === '4444');
+}
+
+// ─── Game data ────────────────────────────────────────────────────────────────
+const kmsRates = {
+  0:[0.95,0.05,0,0],1:[0.9,0.1,0,0],2:[0.85,0.15,0,0],3:[0.85,0.15,0,0],
+  4:[0.80,0.2,0,0],5:[0.75,0.25,0,0],6:[0.7,0.3,0,0],7:[0.65,0.35,0,0],
+  8:[0.6,0.4,0,0],9:[0.55,0.45,0,0],10:[0.5,0.5,0,0],
+  11:[0.45,0.55,0,0],12:[0.4,0.6,0,0],13:[0.35,0.65,0,0],14:[0.3,0.7,0,0],
+  15:[0.3,0.679,0,0.021],16:[0.3,0.679,0,0.021],
+  17:[0.15,0.782,0,0.068],18:[0.15,0.782,0,0.068],
+  19:[0.15,0.765,0,0.085],20:[0.3,0.595,0,0.105],
+  21:[0.15,0.7225,0,0.1275],22:[0.15,0.68,0,0.17],
+  23:[0.10,0.72,0,0.18],24:[0.10,0.72,0,0.18],25:[0.10,0.72,0,0.18],
+  26:[0.07,0.744,0,0.186],27:[0.05,0.76,0,0.19],
+  28:[0.03,0.776,0,0.194],29:[0.01,0.792,0,0.198]
+};
+
+// Boom restore star (KMS)
+const boomRestoreTo = {
+  15:12,16:12,17:12,18:12,19:12,
+  20:15,21:17,22:17,
+  23:19,24:19,25:19,
+  26:20,27:20,28:20,29:20
+};
+
+// Enhancement mode tables (18-21 only, mode 4 = index 3)
+const emodeSucc = {18:[.15,.12,.10,.08],19:[.15,.12,.10,.08],20:[.30,.25,.20,.15],21:[.15,.12,.10,.08]};
+const emodeDest = {18:[.068,.044,.018,0],19:[.085,.0616,.036,0],20:[.105,.075,.040,0],21:[.1275,.088,.045,0]};
+const emodeCostMult = 6.5; // mode 4
+
+// ─── Meso formulas ────────────────────────────────────────────────────────────
+function makeMesoFn(divisor, starExp=2.7, extraMult=1) {
+  return (star, lv) => 100 * Math.round(
+    extraMult * (Math.floor(lv/10)*10)**3 * ((star+1)**starExp) / divisor + 10
+  );
+}
+function preSaviorMesoFn(s) {
+  if (s >= 15) return makeMesoFn(20000);
+  if (s >= 10) return makeMesoFn(40000);
+  return makeMesoFn(2500, 1);
+}
+function kmsMesoFn(s) {
+  switch(s) {
+    case 11: return makeMesoFn(22000);
+    case 12: return makeMesoFn(15000);
+    case 13: return makeMesoFn(11000);
+    case 14: return makeMesoFn(7500);
+    case 17: return makeMesoFn(20000,2.7,4/3);
+    case 18: return makeMesoFn(20000,2.7,20/7);
+    case 19: return makeMesoFn(20000,2.7,40/9);
+    case 21: return makeMesoFn(20000,2.7,8/5);
+    default: return preSaviorMesoFn(s);
+  }
+}
+
+// ─── Cost + rates for one star ────────────────────────────────────────────────
+function getStepInfo(star, lv) {
+  const disc = state.discount ? 0.7 : 1.0;
+  const mvpDisc = parseFloat(document.getElementById('mvp').value) || 0;
+  const useSC = state.starcatch;
+  const useBR = state.boomReduction;
+  const useSG = state.safeguard;
+  const useEmode = state.emode === '4444' && star >= 18 && star <= 21;
+
+  const baseFn = kmsMesoFn(star);
+  const base = baseFn(star, lv);
+
+  // MVP only applies to stars 0-16, base cost only
+  const isMVP = star <= 16 && mvpDisc > 0;
+
+  let succ, boom, cost, modeLabel;
+
+  if (useEmode) {
+    // Mode 4: index 3
+    succ = emodeSucc[star][3];
+    if (useSC) succ = succ * 1.05;
+    boom = emodeDest[star][3] * (useBR ? 0.7 : 1.0);
+    // 30% discount applies to whole cost for emode
+    cost = base * emodeCostMult * disc;
+    modeLabel = 'emode-4';
+  } else {
+    const [sr,,, boomRate] = kmsRates[star];
+    const isSG = useSG && star >= 15 && star <= 17;
+    succ = useSC ? Math.min(sr * 1.05, 1) : sr;
+    if (isSG) {
+      boom = 0;
+    } else {
+      boom = boomRate * (useBR && star >= 15 ? 0.7 : 1.0);
+    }
+    // Apply discounts to base cost
+    let baseDisc = disc;
+    if (isMVP) baseDisc = disc * (1 - mvpDisc);
+    // Safeguard: base gets discount, SG premium (1× base) is full price
+    if (isSG) {
+      cost = base * baseDisc + base; // base*(disc) + base*1
+    } else {
+      cost = base * baseDisc;
+    }
+    modeLabel = isSG ? 'safeguard' : 'normal';
+  }
+
+  const maintain = Math.max(0, 1 - succ - boom);
+  return { cost, succ, boom, maintain, modeLabel };
+}
+
+// ─── Simulate ─────────────────────────────────────────────────────────────────
+async function runSim() {
+  const startStar = Math.max(0, Math.min(29, parseInt(document.getElementById('startStar').value) || 0));
+  const endStar   = Math.max(1, Math.min(30, parseInt(document.getElementById('endStar').value) || 22));
+  const lv  = parseInt(document.getElementById('itemLevel').value) || 250;
+  const n   = parseInt(document.getElementById('simCount').value) || 10000;
+
+  if (endStar <= startStar) {
+    document.getElementById('status').textContent = 'Error: End star must be greater than start star.';
+    return;
+  }
+
+  document.getElementById('resultsSection').classList.add('hidden');
+  const prog = document.getElementById('prog');
+  const status = document.getElementById('status');
+  document.getElementById('runBtn').disabled = true;
+  prog.style.width = '0%';
+  status.textContent = `Simulating ${n.toLocaleString()} runs (${startStar}★ → ${endStar}★)…`;
+  await new Promise(r => setTimeout(r, 0));
+
+  const steps = endStar - startStar;
+  const costs = new Float64Array(n);
+  const booms = new Float64Array(n);
+  let tcSum=0, bSum=0, tc2=0, b2=0;
+  const segCost  = new Float64Array(steps);
+  const segBooms = new Float64Array(steps);
+
+  const CHUNK = 200;
+  for (let ci = 0; ci < n; ci += CHUNK) {
+    const cEnd = Math.min(ci + CHUNK, n);
+    for (let i = ci; i < cEnd; i++) {
+      let cost = 0, boomCount = 0, star = startStar;
+      while (star < endStar) {
+        const si = Math.min(star - startStar, steps - 1);
+        const { cost: ac, succ, boom } = getStepInfo(star, lv);
+        cost += ac;
+        segCost[si] += ac;
+        const r = Math.random();
+        if (r < succ) {
+          star++;
+        } else if (r < succ + boom) {
+          boomCount++;
+          segBooms[si]++;
+          const restoreTo = boomRestoreTo[star] ?? 12;
+          star = Math.max(startStar, restoreTo);
+        }
+        // else maintain
+      }
+      costs[i] = cost; booms[i] = boomCount;
+      tcSum += cost; bSum += boomCount;
+      tc2 += cost*cost; b2 += boomCount*boomCount;
+    }
+    prog.style.width = (cEnd/n*100).toFixed(1)+'%';
+    status.textContent = `Simulating… ${cEnd.toLocaleString()} / ${n.toLocaleString()}`;
+    await new Promise(r => setTimeout(r, 0));
+  }
+
+  prog.style.width = '100%';
+  document.getElementById('runBtn').disabled = false;
+
+  const avgCost  = tcSum/n/1e9;
+  const avgBooms = bSum/n;
+  const stdevCost  = Math.sqrt(Math.max(0, tc2/n - (tcSum/n)**2))/1e9;
+  const stdevBooms = Math.sqrt(Math.max(0, b2/n - (bSum/n)**2));
+
+  costs.sort(); booms.sort();
+  const medCost  = n%2===0 ? (costs[n/2-1]+costs[n/2])/2/1e9 : costs[Math.floor(n/2)]/1e9;
+  const medBooms = n%2===0 ? (booms[n/2-1]+booms[n/2])/2 : booms[Math.floor(n/2)];
+  const p95Cost  = costs[Math.floor(n*0.95)]/1e9;
+  const p95Booms = booms[Math.floor(n*0.95)];
+
+  status.textContent = `Done — ${n.toLocaleString()} runs | avg: ${avgCost.toFixed(2)}b | median: ${medCost.toFixed(2)}b | avg booms: ${avgBooms.toFixed(2)}`;
+
+  renderCards({ avgCost, medCost, stdevCost, p95Cost, avgBooms, medBooms, stdevBooms, p95Booms, n, startStar, endStar });
+  drawHist('costHist', costs, n, 'cost', avgCost, medCost);
+  drawHist('boomHist', booms, n, 'booms', avgBooms, medBooms);
+  document.getElementById('costHistLabel').textContent = `Cost distribution — ${n.toLocaleString()} runs`;
+  document.getElementById('boomHistLabel').textContent = `Boom distribution — ${n.toLocaleString()} runs`;
+  renderBreakdown(segCost, segBooms, n, lv, startStar, endStar);
+  document.getElementById('resultsSection').classList.remove('hidden');
+}
+
+function renderCards({ avgCost, medCost, stdevCost, p95Cost, avgBooms, medBooms, stdevBooms, p95Booms, n, startStar, endStar }) {
+  document.getElementById('resultsGrid').innerHTML = `
+    <div class="result-card hi">
+      <div class="result-label">Avg Cost</div>
+      <div class="result-value">${avgCost.toFixed(2)}<span>b</span></div>
+      <div class="result-sub">σ ±${stdevCost.toFixed(2)}b</div>
+    </div>
+    <div class="result-card">
+      <div class="result-label">Median Cost</div>
+      <div class="result-value">${medCost.toFixed(2)}<span>b</span></div>
+      <div class="result-sub">typical single run</div>
+    </div>
+    <div class="result-card">
+      <div class="result-label">95th %ile Cost</div>
+      <div class="result-value">${p95Cost.toFixed(2)}<span>b</span></div>
+      <div class="result-sub">budget for 95% of runs</div>
+    </div>
+    <div class="result-card hi2">
+      <div class="result-label">Avg Booms</div>
+      <div class="result-value">${avgBooms.toFixed(2)}</div>
+      <div class="result-sub">σ ±${stdevBooms.toFixed(2)}</div>
+    </div>
+    <div class="result-card">
+      <div class="result-label">Median Booms</div>
+      <div class="result-value">${medBooms.toFixed(1)}</div>
+      <div class="result-sub">typical single run</div>
+    </div>
+    <div class="result-card">
+      <div class="result-label">95th %ile Booms</div>
+      <div class="result-value">${p95Booms}</div>
+      <div class="result-sub">${startStar}★ → ${endStar}★ · ${(n/1000).toFixed(0)}k sims</div>
+    </div>
+  `;
+}
+
+function drawHist(svgId, data, n, type, avg, med) {
+  const svg = document.getElementById(svgId);
+  const W=700, H=200, pad={l:56,r:16,t:18,b:34};
+  const cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
+  const BINS=14;
+  const minV=data[0], maxV=data[n-1];
+  if (minV===maxV) { svg.innerHTML=`<text x="350" y="100" text-anchor="middle" fill="#4a5270" font-size="12" font-family="Share Tech Mono">No variance</text>`; return; }
+  const useLog = type==='cost' && maxV/Math.max(minV,1)>20;
+  const sc = v => useLog ? Math.log(Math.max(v,1)) : v;
+  const minS=sc(minV), maxS=sc(maxV), range=maxS-minS;
+  const binOf = v => Math.min(Math.floor((sc(v)-minS)/range*BINS), BINS-1);
+  const counts = new Array(BINS).fill(0);
+  for (let i=0;i<n;i++) counts[binOf(data[i])]++;
+  const maxC = Math.max(...counts);
+  const barCol = type==='cost' ? '#4f9eff' : '#e05555';
+  const fmtV = v => type==='cost' ? (v/1e9).toFixed(1)+'b' : v.toFixed(1);
+  const fromSc = s => useLog ? Math.exp(s) : s;
+  const xp = f => pad.l + f*cw;
+  const yp = c => pad.t + ch - (c/maxC)*ch;
+
+  let html='';
+  for (let i=0;i<=4;i++) {
+    const y=pad.t+ch*(1-i/4);
+    html+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+cw}" y2="${y}" stroke="#1e2438" stroke-width="1"/>`;
+    html+=`<text x="${pad.l-4}" y="${y+3}" text-anchor="end" font-size="9" fill="#4a5270" font-family="Share Tech Mono">${(maxC*i/4/n*100).toFixed(0)}%</text>`;
+  }
+  for (let i=0;i<BINS;i++) {
+    const x1=xp(i/BINS), bw=cw/BINS-2, h=(counts[i]/maxC)*ch;
+    const lo=fromSc(minS+i/BINS*range);
+    html+=`<rect x="${x1+1}" y="${yp(counts[i])}" width="${bw}" height="${h}" fill="${barCol}" opacity="0.75" rx="1"/>`;
+    if (counts[i]>0) html+=`<text x="${x1+1+bw/2}" y="${yp(counts[i])-3}" text-anchor="middle" font-size="8" fill="${barCol}" font-family="Share Tech Mono">${(counts[i]/n*100).toFixed(1)}%</text>`;
+    if (i%2===0) html+=`<text x="${x1+1+bw/2}" y="${H-6}" text-anchor="middle" font-size="8" fill="#4a5270" font-family="Share Tech Mono">${fmtV(lo)}</text>`;
+  }
+  // avg line
+  const avgS=sc(type==='cost'?avg*1e9:avg);
+  const avgX=xp((avgS-minS)/range);
+  html+=`<line x1="${avgX}" y1="${pad.t}" x2="${avgX}" y2="${pad.t+ch}" stroke="#f0893a" stroke-width="1.5" stroke-dasharray="4 2"/>`;
+  html+=`<text x="${avgX+3}" y="${pad.t+12}" font-size="9" fill="#f0893a" font-family="Share Tech Mono">avg</text>`;
+  // med line
+  const medS=sc(type==='cost'?med*1e9:med);
+  const medX=xp((medS-minS)/range);
+  html+=`<line x1="${medX}" y1="${pad.t}" x2="${medX}" y2="${pad.t+ch}" stroke="#3dbc7c" stroke-width="1.5" stroke-dasharray="4 2"/>`;
+  html+=`<text x="${medX+3}" y="${pad.t+24}" font-size="9" fill="#3dbc7c" font-family="Share Tech Mono">med</text>`;
+
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.innerHTML=html;
+}
+
+function renderBreakdown(segCost, segBooms, n, lv, startStar, endStar) {
+  const tbody = document.getElementById('breakdownBody');
+  tbody.innerHTML='';
+  const steps = endStar - startStar;
+  for (let i=0;i<steps;i++) {
+    const star = startStar+i;
+    const { succ, boom, modeLabel } = getStepInfo(star, lv);
+    const typeCell = modeLabel==='emode-4'
+      ? `<span class="emode-cell">Mode 4</span>`
+      : modeLabel==='safeguard'
+      ? `<span class="sg-cell">Safeguard</span>`
+      : '—';
+    const tr = document.createElement('tr');
+    tr.innerHTML=`
+      <td>${star}★→${star+1}★</td>
+      <td>${typeCell}</td>
+      <td>${(succ*100).toFixed(2)}%</td>
+      <td>${(boom*100).toFixed(2)}%</td>
+      <td>${(segCost[i]/n/1e9).toFixed(3)}b</td>
+      <td>${(segBooms[i]/n).toFixed(3)}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+</script>
+</body>
+</html>
